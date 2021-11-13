@@ -1,9 +1,26 @@
 
+import { Route, Routes, BrowserRouter } from 'react-router-dom';
+import ClientInfoPage from './pages/ClientInfo';
+import FinalInvoicePage from './pages/FinalInvoice';
+import GenerateInvoicePage from './pages/GenerateInvoice';
+import UserProfilePage from './pages/UserProfile';
+
+
+
 function App() {
   return (
-    <div>
-      <h1>Invoice App</h1>
-    </div>
+    <BrowserRouter>
+
+      <Routes>
+
+        <Route path='/' element={<UserProfilePage />} />
+        <Route path='/client' element={<ClientInfoPage />} />
+        <Route path='/generate-invoice' element={<GenerateInvoicePage />} />
+        <Route path='/finalize-invoice' element={<FinalInvoicePage />} />
+
+      </Routes>
+
+    </BrowserRouter>
   );
 }
 
