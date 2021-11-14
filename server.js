@@ -10,6 +10,9 @@ const port = 8080;
 
 app.use(cors());
 
+const invoiceAppRoutes = require('./backend/appRoutes');
+app.use('/', invoiceAppRoutes)
+
 
 app.use((req, res, next) => {
     const error = new Error('Not Found')
