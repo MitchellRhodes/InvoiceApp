@@ -20,8 +20,8 @@ routes.get('/users', async (req, res) => {
 })
 
 //get specific user with email
-routes.get('/user/:email', async (req, res) => {
-    const user = await db.oneOrNone(`SELECT * FROM users WHERE user.email= $(email)`, {
+routes.get('/users/:email', async (req, res) => {
+    const user = await db.oneOrNone(`SELECT * FROM users WHERE users.email= $(email)`, {
         email: req.params.email
     });
 
@@ -29,7 +29,7 @@ routes.get('/user/:email', async (req, res) => {
         return res.status(404).send('User not found')
     }
 
-    res.status(200), json(user);
+    res.status(200).json(user);
 });
 
 
