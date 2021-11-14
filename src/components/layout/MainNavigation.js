@@ -1,8 +1,17 @@
 import { Link } from 'react-router-dom';
+import LoginButton from '../UI/LoginButton';
+import LogoutButton from '../UI/LogoutButton';
+import { useAuth0 } from '@auth0/auth0-react';
+
+
 
 import classes from './MainNavigation.module.css';
 
 function MainNavigation() {
+
+    const { isLoading } = useAuth0();
+
+    if (isLoading) return <div>Loading...</div>
 
     return (
         <header className={classes.header}>
@@ -30,6 +39,10 @@ function MainNavigation() {
 
                     <li>
                         <Link to='/finalize-invoice'>Final Invoice</Link>
+                    </li>
+                    <li>
+                        <LoginButton />
+                        <LogoutButton />
                     </li>
 
                 </ul>
