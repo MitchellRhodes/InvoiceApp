@@ -5,6 +5,7 @@ import { Navigate } from 'react-router-dom';
 import axios from "axios";
 import Modal from "../UI/Modal";
 import Backdrop from "../UI/Backdrop";
+import Card from "../UI/Card";
 
 
 function UserProfilePage() {
@@ -16,6 +17,8 @@ function UserProfilePage() {
     const [error, setError] = useState(null);
 
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [updateCardIsOpen, setUpdateCardIsOpen] = useState(false);
+
 
     useEffect(() => {
 
@@ -88,6 +91,14 @@ function UserProfilePage() {
         setModalIsOpen(false);
     }
 
+    function openUpdate() {
+        setUpdateCardIsOpen(true);
+    }
+
+    function closeUpdate() {
+        setUpdateCardIsOpen(false);
+    }
+
     return (
         isAuthenticated && (
             <section>
@@ -96,7 +107,16 @@ function UserProfilePage() {
                 {/* {loadedUser.name && <h1>{loadedUser.name}</h1>} */}
                 <h2>{loadedUser.email}</h2>
 
-                <button>Edit Profile</button>
+                <button onClick={openUpdate}>Edit Profile</button>
+                {updateCardIsOpen ?
+                    <div>
+                        <Card>
+                            <h3>Update is Open</h3>
+                        </Card>
+                        <button>Submit</button>
+                        <button onClick={closeUpdate}>Cancel</button>
+                    </div>
+                    : null}
 
                 <button onClick={openModal}>Delete Profile</button>
                 {modalIsOpen ? <Modal onCancel={closeModal} onRemove={() => deleteUser(loadedUser.id)} /> : null}
