@@ -37,11 +37,11 @@ routes.get('/users/:email', async (req, res) => {
 
 routes.post('/users', async (req, res) => {
 
-    // const validation = validateNewUser(req.body);
+    const validation = validateUser(req.body);
 
-    // if (validation.error) {
-    //     return res.status(400).send(validation.error.details[0].message)
-    // }
+    if (validation.error) {
+        return res.status(400).send(validation.error.details[0].message)
+    }
 
     await db.none(`INSERT INTO users(email) VALUES($(email))`, {
         email: req.body.email
@@ -64,21 +64,15 @@ routes.post('/users', async (req, res) => {
 
 //VALIDATIONS========================================================
 
-function validateNewUser(user) {
-
-    const schema = Joi.object({
-        email: Joi.string().min(1).required()
-    });
-};
-
 function validateUser(user) {
     const schema = Joi.object({
-        name: Joi.string().min(1).required(),
+
+        //fix phone number later
+        first_name: Joi.string().min(1),
+        last_name: Joi.string().min(1),
         email: Joi.string().min(1).required(),
-        nickname: Joi.string().max(50),
-        stance: Joi.string().max(10),
-        age: Joi.number().integer().min(3).max(100),
-        location: Joi.string().max(250)
+        phone_number: Joi.string().min(1),
+        company_name: Joi.string().min(1)
     });
 
     return schema.validate(user);
