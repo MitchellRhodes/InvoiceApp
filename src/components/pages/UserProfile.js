@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth0 } from '@auth0/auth0-react';
 import { Navigate } from 'react-router-dom';
 import axios from "axios";
+import Modal from "../UI/Modal";
 
 
 function UserProfilePage() {
@@ -12,6 +13,8 @@ function UserProfilePage() {
     const [isLoading, setIsLoading] = useState(true);
     const [loadedUser, setLoadedUser] = useState({});
     const [error, setError] = useState(null);
+
+    const [modalIsOpen, setModalIsOpen] = useState(false);
 
     useEffect(() => {
 
@@ -70,11 +73,33 @@ function UserProfilePage() {
         return <Navigate to='/' />
     }
 
+    function deleteUser(id) {
+        axios.delete(`http://localhost:8080/users/${id}`)
+        closeModal();
+        logout();
+    }
+
+    function openModal() {
+        setModalIsOpen(true);
+    }
+
+    function closeModal() {
+        setModalIsOpen(false);
+    }
+
     return (
-        <section>
-            <h1>User Profile</h1>
-            <h2>{loadedUser.email}</h2>
-        </section>
+        isAuthenticated && (
+            <section>
+                {error && <div>{error}</div>}
+                {isLoading && <div>Loading...</div>}
+                {/* {loadedUser.name && <h1>{loadedUser.name}</h1>} */}
+                <h2>{loadedUser.email}</h2>
+
+                <button>Edit Profile</button>
+                <button onClick={openModal}>Delete Profile</button>
+                {modalIsOpen ? <Modal onCancel={closeModal} onRemove={() => deleteUser(loadedUser.id)} /> : null}
+            </section>
+        )
 
     )
 }
