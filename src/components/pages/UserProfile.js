@@ -64,7 +64,7 @@ function UserProfilePage() {
             getUser();
         }
 
-    }, [user]);
+    }, [user, isAuthenticated]);
 
     if (!isAuthenticated) {
         return <Navigate to='/' />
@@ -73,7 +73,7 @@ function UserProfilePage() {
     return (
         <section>
             <h1>User Profile</h1>
-            <h2>{user.name}</h2>
+            <h2>{loadedUser.email}</h2>
         </section>
 
     )
