@@ -4,6 +4,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { Navigate } from 'react-router-dom';
 import axios from "axios";
 import Modal from "../UI/Modal";
+import Backdrop from "../UI/Backdrop";
 
 
 function UserProfilePage() {
@@ -96,8 +97,11 @@ function UserProfilePage() {
                 <h2>{loadedUser.email}</h2>
 
                 <button>Edit Profile</button>
+
                 <button onClick={openModal}>Delete Profile</button>
                 {modalIsOpen ? <Modal onCancel={closeModal} onRemove={() => deleteUser(loadedUser.id)} /> : null}
+                {modalIsOpen ? <Backdrop onClick={closeModal} /> : null}
+
             </section>
         )
 
