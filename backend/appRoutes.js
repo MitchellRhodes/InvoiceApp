@@ -57,6 +57,47 @@ routes.post('/users', async (req, res) => {
 
 //PUT ROUTES=========================================================
 
+routes.put('/users/:id', async (req, res) => {
+
+    const user = await db.oneOrNone(`SELECT * FROM users WHERE users.id = $(id)`, {
+        id: +req.params.id
+    });
+
+    if (!user) {
+        return res.status(404).send('User ID was not found.')
+    }
+
+    const validation = validateUserUpdate(req.body);
+
+    if (validation.error) {
+        return res.status(400).send(validation.error.details[0].message);
+    }
+
+    await db.oneOrNone(`UPDATE users
+    SET
+    first_name = $(first_name),
+    last_name = $(last_name),
+    email = $(email),
+    phone_number = $(phone_number),
+    company_name = $(company_name)
+    WHERE id = $(id)`, {
+        id: +req.params.id,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+        phone_number: req.body.phone_number,
+        company_name: req.body.company_name
+    })
+
+    const updatedUser = await db.oneOrNone(`SELECT * FROM users WHERE users.id = $(id)`, {
+        id: +req.params.id
+    })
+
+    res.status(200).json(updatedUser);
+
+});
+
+
 
 //DELETE ROUTES=======================================================
 
@@ -93,5 +134,16 @@ function validateUser(user) {
     return schema.validate(user);
 };
 
+function validateUserUpdate(user) {
+    const schema = Joi.object({
+        first_name: Joi.string().min(1),
+        last_name: Joi.string().min(1),
+        email: Joi.string().min(1),
+        phone_number: Joi.string().min(1),
+        company_name: Joi.string().min(1)
+    });
+
+    return schema.validate(user);
+};
 
 module.exports = routes;

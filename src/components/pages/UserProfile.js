@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 
 import { useAuth0 } from '@auth0/auth0-react';
 import { Navigate } from 'react-router-dom';
@@ -20,6 +20,13 @@ function UserProfilePage() {
 
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [updateCardIsOpen, setUpdateCardIsOpen] = useState(false);
+
+
+    const firstNameInputRef = useRef();
+    const lastNameInputRef = useRef();
+    const emailInputRef = useRef();
+    const companyNameInputRef = useRef();
+    const phoneNumberInputRef = useRef();
 
 
     useEffect(() => {
@@ -89,14 +96,38 @@ function UserProfilePage() {
     async function updateUser(event) {
         event.preventDefault();
 
-        //input refs
+        const enteredFirstName = firstNameInputRef.current.value;
+        const enteredLastName = lastNameInputRef.current.value;
+        const enteredEmail = emailInputRef.current.value;
+        const enteredCompany = companyNameInputRef.current.value;
+        const enteredPhone = phoneNumberInputRef.current.value;
+
 
         const updatedUser = {
-
+            first_name: enteredFirstName,
+            last_name: enteredLastName,
+            email: enteredEmail,
+            company_name: enteredCompany,
+            phone_number: enteredPhone
         }
 
         //maybe work on userContext first
-        await axios.put()
+        await axios.put(`http://localhost:8080/users/${loggedUser}`, updatedUser)
+            .then(response => {
+                if (response.statusText !== 'OK') {
+
+                    throw Error(response.statusText)
+                }
+
+                setLoadedUser(response.data);
+
+            }).catch(err => {
+
+                setError(err.message);
+                console.log(error)
+            });
+
+        closeUpdate();
     }
 
 
@@ -129,9 +160,30 @@ function UserProfilePage() {
                 {updateCardIsOpen ?
                     <div>
                         <Card>
-                            <h3>Update is Open</h3>
+                            <form>
+                                <div>
+                                    <label htmlFor='First Name'>First Name</label>
+                                    <input type='text' id='firstname' ref={firstNameInputRef} />
+                                </div>
+                                <div>
+                                    <label htmlFor='Last Name'>Last Name</label>
+                                    <input type='text' id='lastname' ref={lastNameInputRef} />
+                                </div>
+                                <div>
+                                    <label htmlFor='Email'>Email</label>
+                                    <input type='text' id='email' ref={emailInputRef} />
+                                </div>
+                                <div>
+                                    <label htmlFor='Company Name'>Company Name</label>
+                                    <input type='text' id='companyname' ref={companyNameInputRef} />
+                                </div>
+                                <div>
+                                    <label htmlFor='Phone Number'>Phone Number</label>
+                                    <input type='text' id='phonenumber' ref={phoneNumberInputRef} />
+                                </div>
+                            </form>
                         </Card>
-                        <button>Submit</button>
+                        <button onClick={updateUser}>Submit</button>
                         <button onClick={closeUpdate}>Cancel</button>
                     </div>
                     : null}
