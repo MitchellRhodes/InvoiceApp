@@ -1,5 +1,8 @@
 
 import { Route, Routes } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import { UserContext, userContext } from './contexts/UserContext';
+
 import Layout from './components/layout/Layout';
 import ClientInfoPage from './components/pages/ClientInfo';
 import FinalInvoicePage from './components/pages/FinalInvoice';
@@ -10,19 +13,25 @@ import UserProfilePage from './components/pages/UserProfile';
 
 
 function App() {
+
+  const [loggedUser, setLoggedUser] = useState(null);
+
+  const userValue = useMemo(() => ({ loggedUser, setLoggedUser }), [loggedUser, setLoggedUser]);
+
   return (
     <Layout>
 
-      <Routes>
+      <UserContext.Provider value={userValue}>
+        <Routes>
 
-        <Route path='/' element={<LoginPage />} />
-        <Route path='/user-profile' element={<UserProfilePage />} />
-        <Route path='/client' element={<ClientInfoPage />} />
-        <Route path='/generate-invoice' element={<GenerateInvoicePage />} />
-        <Route path='/finalize-invoice' element={<FinalInvoicePage />} />
+          <Route path='/' element={<LoginPage />} />
+          <Route path='/user-profile' element={<UserProfilePage />} />
+          <Route path='/client' element={<ClientInfoPage />} />
+          <Route path='/generate-invoice' element={<GenerateInvoicePage />} />
+          <Route path='/finalize-invoice' element={<FinalInvoicePage />} />
 
-      </Routes>
-
+        </Routes>
+      </UserContext.Provider>
     </Layout>
   );
 }

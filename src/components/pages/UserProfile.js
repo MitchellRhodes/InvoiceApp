@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { useAuth0 } from '@auth0/auth0-react';
 import { Navigate } from 'react-router-dom';
@@ -6,11 +6,13 @@ import axios from "axios";
 import Modal from "../UI/Modal";
 import Backdrop from "../UI/Backdrop";
 import Card from "../UI/Card";
+import { UserContext } from "../../contexts/UserContext";
 
 
 function UserProfilePage() {
 
     const { user, isAuthenticated, logout } = useAuth0();
+    const { loggedUser, setLoggedUser } = useContext(UserContext);
 
     const [isLoading, setIsLoading] = useState(true);
     const [loadedUser, setLoadedUser] = useState({});
@@ -46,6 +48,7 @@ function UserProfilePage() {
 
                     setIsLoading(false);
                     setError(null);
+                    setLoggedUser(id);
                     return setLoadedUser(person);
 
                 }).catch(err => {
@@ -77,11 +80,26 @@ function UserProfilePage() {
         return <Navigate to='/' />
     }
 
-    function deleteUser(id) {
-        axios.delete(`http://localhost:8080/users/${id}`)
+    function deleteUser() {
+        axios.delete(`http://localhost:8080/users/${loggedUser}`)
         closeModal();
         logout();
     }
+
+    async function updateUser(event) {
+        event.preventDefault();
+
+        //input refs
+
+        const updatedUser = {
+
+        }
+
+        //maybe work on userContext first
+        await axios.put()
+    }
+
+
 
     function openModal() {
         setModalIsOpen(true);
@@ -119,7 +137,7 @@ function UserProfilePage() {
                     : null}
 
                 <button onClick={openModal}>Delete Profile</button>
-                {modalIsOpen ? <Modal onCancel={closeModal} onRemove={() => deleteUser(loadedUser.id)} /> : null}
+                {modalIsOpen ? <Modal onCancel={closeModal} onRemove={deleteUser} /> : null}
                 {modalIsOpen ? <Backdrop onClick={closeModal} /> : null}
 
             </section>
