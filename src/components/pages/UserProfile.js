@@ -6,6 +6,7 @@ import axios from "axios";
 import Modal from "../UI/Modal";
 import Backdrop from "../UI/Backdrop";
 import Card from "../UI/Card";
+import classes from "../UI/forms.module.css";
 import { UserContext } from "../../contexts/UserContext";
 
 
@@ -160,33 +161,36 @@ function UserProfilePage() {
                 {updateCardIsOpen ?
                     <div>
                         <Card>
-                            <form>
-                                <div>
+                            <form className={classes.form}>
+                                <div className={classes.control}>
                                     <label htmlFor='First Name'>First Name</label>
                                     <input type='text' id='firstname' ref={firstNameInputRef} />
                                 </div>
-                                <div>
+                                <div className={classes.control}>
                                     <label htmlFor='Last Name'>Last Name</label>
                                     <input type='text' id='lastname' ref={lastNameInputRef} />
                                 </div>
-                                <div>
+                                <div className={classes.control}>
                                     <label htmlFor='Email'>Email</label>
                                     <input type='text' id='email' ref={emailInputRef} />
                                 </div>
-                                <div>
+                                <div className={classes.control}>
                                     <label htmlFor='Company Name'>Company Name</label>
                                     <input type='text' id='companyname' ref={companyNameInputRef} />
                                 </div>
-                                <div>
+                                <div className={classes.control}>
                                     <label htmlFor='Phone Number'>Phone Number</label>
                                     <input type='text' id='phonenumber' ref={phoneNumberInputRef} />
                                 </div>
+                                <div className={classes.actions}>
+                                    <button onClick={updateUser}>Submit</button>
+                                    <button onClick={closeUpdate}>Cancel</button>
+                                </div>
                             </form>
                         </Card>
-                        <button onClick={updateUser}>Submit</button>
-                        <button onClick={closeUpdate}>Cancel</button>
                     </div>
                     : null}
+                {updateCardIsOpen ? <Backdrop onClick={closeUpdate} /> : null}
 
                 <button onClick={openModal}>Delete Profile</button>
                 {modalIsOpen ? <Modal onCancel={closeModal} onRemove={deleteUser} /> : null}
