@@ -97,12 +97,32 @@ function UserProfilePage() {
     async function updateUser(event) {
         event.preventDefault();
 
-        const enteredFirstName = firstNameInputRef.current.value;
-        const enteredLastName = lastNameInputRef.current.value;
-        const enteredEmail = emailInputRef.current.value;
-        const enteredCompany = companyNameInputRef.current.value;
-        const enteredPhone = phoneNumberInputRef.current.value;
+        let enteredFirstName = firstNameInputRef.current.value;
+        let enteredLastName = lastNameInputRef.current.value;
+        let enteredEmail = emailInputRef.current.value;
+        let enteredCompany = companyNameInputRef.current.value;
+        let enteredPhone = phoneNumberInputRef.current.value;
 
+
+        if (!enteredFirstName) {
+            enteredFirstName = loadedUser.first_name;
+        }
+
+        if (!enteredLastName) {
+            enteredLastName = loadedUser.last_name;
+        }
+
+        if (!enteredEmail) {
+            enteredEmail = loadedUser.email;
+        }
+
+        if (!enteredPhone) {
+            enteredPhone = loadedUser.phone_number;
+        }
+
+        if (!enteredCompany) {
+            enteredCompany = loadedUser.company_name;
+        }
 
         const updatedUser = {
             first_name: enteredFirstName,
@@ -112,7 +132,6 @@ function UserProfilePage() {
             phone_number: enteredPhone
         }
 
-        //maybe work on userContext first
         await axios.put(`http://localhost:8080/users/${loggedUser}`, updatedUser)
             .then(response => {
                 if (response.statusText !== 'OK') {
@@ -155,7 +174,14 @@ function UserProfilePage() {
                 {error && <div>{error}</div>}
                 {isLoading && <div>Loading...</div>}
                 {/* {loadedUser.name && <h1>{loadedUser.name}</h1>} */}
-                <h2>{loadedUser.email}</h2>
+                <div>
+                    <h2>{loadedUser.first_name} {loadedUser.last_name}</h2>
+                    <h3>{loadedUser.company_name}</h3>
+                </div>
+                <div>
+                    <h5><span>Email: </span>{loadedUser.email}</h5>
+                    <h5><span>Phone: </span>{loadedUser.phone_number}</h5>
+                </div>
 
                 <button onClick={openUpdate}>Edit Profile</button>
                 {updateCardIsOpen ?
