@@ -1,3 +1,4 @@
+const { response } = require('express');
 const express = require('express');
 const pgp = require('pg-promise')();
 const Joi = require('joi');
@@ -33,7 +34,17 @@ routes.get('/users/:email', async (req, res) => {
 });
 
 //Get clients of specific user
+routes.get('/clients/:id', async (req, res) => {
+    const clients = await db.manyOrNone(`SELECT * FROM clients WHERE clients.user_id=$(id)`, {
+        id: +req.params.id
+    });
 
+    if (!clients) {
+        return res.status(404).send('No clients found')
+    }
+
+    res.status(200).json(clients);
+});
 
 //POST ROUTES============================================================
 
@@ -49,13 +60,39 @@ routes.post('/users', async (req, res) => {
         email: req.body.email
     })
 
-    const newUser = await db.one(`SELECT email FROM users WHERE email=$(email)`, {
+    const newUser = await db.one(`SELECT * FROM users WHERE email=$(email)`, {
         email: req.body.email
     });
 
     res.status(201).json(newUser);
 });
 
+routes.post('/clients/:id', async (req, res) => {
+
+    const validation = validateClient(req.body);
+
+    if (validation.error) {
+        return res.status(400).send(validation.error.details[0].message)
+    }
+
+    await db.none(`INSERT INTO clients(
+        user_id,first_name,last_name,company_name,email,phone_number)
+        VALUES($(user_id), $(first_name),$(last_name),$(company_name),
+        $(email),$(phone_number))`, {
+        user_id: +req.params.id,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        company_name: req.body.company_name,
+        email: req.body.email,
+        phone_number: req.body.phone_number
+    })
+
+    const newClient = await db.one(`SELECT * FROM clients WHERE email=$(email)`, {
+        email: req.body.email
+    })
+
+    res.status(201).json(newClient);
+})
 
 //PUT ROUTES=========================================================
 
@@ -148,4 +185,16 @@ function validateUserUpdate(user) {
     return schema.validate(user);
 };
 
+
+function validateClient(client) {
+    const schema = Joi.object({
+        first_name: Joi.string().min(1).required(),
+        last_name: Joi.string().min(1).required(),
+        email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+        phone_number: Joi.string().min(1).required(),
+        company_name: Joi.string().allow('', null)
+    });
+
+    return schema.validate(client);
+};
 module.exports = routes;
