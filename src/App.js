@@ -1,7 +1,7 @@
 
 import { Route, Routes } from 'react-router-dom';
 import { useMemo, useState } from 'react';
-import { UserContext, userContext } from './contexts/UserContext';
+import { UserContext } from './contexts/UserContext';
 
 import Layout from './components/layout/Layout';
 import ClientInfoPage from './components/pages/ClientInfo';

@@ -32,6 +32,8 @@ routes.get('/users/:email', async (req, res) => {
     res.status(200).json(user);
 });
 
+//Get clients of specific user
+
 
 //POST ROUTES============================================================
 
@@ -126,7 +128,7 @@ function validateUser(user) {
         //fix phone number later
         first_name: Joi.string().min(1),
         last_name: Joi.string().min(1),
-        email: Joi.string().min(1).required(),
+        email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
         phone_number: Joi.string().min(1),
         company_name: Joi.string().min(1)
     });
@@ -136,11 +138,11 @@ function validateUser(user) {
 
 function validateUserUpdate(user) {
     const schema = Joi.object({
-        first_name: Joi.string().min(1),
-        last_name: Joi.string().min(1),
-        email: Joi.string().min(1),
-        phone_number: Joi.string().min(1),
-        company_name: Joi.string().min(1)
+        first_name: Joi.string(),
+        last_name: Joi.string(),
+        email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+        phone_number: Joi.string(),
+        company_name: Joi.string()
     });
 
     return schema.validate(user);

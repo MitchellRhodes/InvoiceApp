@@ -82,7 +82,7 @@ function UserProfilePage() {
             getUser();
         }
 
-    }, [user, isAuthenticated]);
+    }, [user, isAuthenticated, setLoggedUser]);
 
     if (!isAuthenticated) {
         return <Navigate to='/' />
@@ -173,7 +173,6 @@ function UserProfilePage() {
             <section>
                 {error && <div>{error}</div>}
                 {isLoading && <div>Loading...</div>}
-                {/* {loadedUser.name && <h1>{loadedUser.name}</h1>} */}
                 <div>
                     <h2>{loadedUser.first_name} {loadedUser.last_name}</h2>
                     <h3>{loadedUser.company_name}</h3>
@@ -184,6 +183,10 @@ function UserProfilePage() {
                 </div>
 
                 <button onClick={openUpdate}>Edit Profile</button>
+                <button onClick={openModal}>Delete Profile</button>
+                {modalIsOpen ? <Modal onCancel={closeModal} onRemove={deleteUser} /> : null}
+                {modalIsOpen ? <Backdrop onClick={closeModal} /> : null}
+
                 {updateCardIsOpen ?
                     <div>
                         <Card>
@@ -217,10 +220,6 @@ function UserProfilePage() {
                     </div>
                     : null}
                 {updateCardIsOpen ? <Backdrop onClick={closeUpdate} /> : null}
-
-                <button onClick={openModal}>Delete Profile</button>
-                {modalIsOpen ? <Modal onCancel={closeModal} onRemove={deleteUser} /> : null}
-                {modalIsOpen ? <Backdrop onClick={closeModal} /> : null}
 
             </section>
         )
