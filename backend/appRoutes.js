@@ -138,11 +138,11 @@ function validateUser(user) {
 
 function validateUserUpdate(user) {
     const schema = Joi.object({
-        first_name: Joi.string(),
-        last_name: Joi.string(),
+        first_name: Joi.string().allow('', null),
+        last_name: Joi.string().allow('', null),
         email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-        phone_number: Joi.string(),
-        company_name: Joi.string()
+        phone_number: Joi.string().allow('', null),
+        company_name: Joi.string().allow('', null)
     });
 
     return schema.validate(user);
