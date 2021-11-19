@@ -58,8 +58,25 @@ function ClientInfoPage() {
 
     }, [isAuthenticated, loggedUser]);
 
+
     async function updateClientList(clientData) {
-        //post
+
+        await axios.post(`http://localhost:8080/clients/${loggedUser}`, clientData)
+
+            .then(response => {
+
+                if (response.statusText !== 'Created') {
+
+                    throw Error(response.statusText)
+                }
+
+                setLoadedClients(response.data);
+
+            }).catch(err => {
+
+                setError(err.message);
+                console.log(error)
+            })
     }
 
     function openClientPost() {

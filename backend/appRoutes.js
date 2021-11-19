@@ -87,8 +87,8 @@ routes.post('/clients/:id', async (req, res) => {
         phone_number: req.body.phone_number
     })
 
-    const newClient = await db.one(`SELECT * FROM clients WHERE email=$(email)`, {
-        email: req.body.email
+    const newClient = await db.manyOrNone(`SELECT * FROM clients WHERE user_id=$(id)`, {
+        id: +req.params.id
     })
 
     res.status(201).json(newClient);
