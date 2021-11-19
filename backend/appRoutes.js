@@ -157,6 +157,24 @@ routes.delete('/users/:id', async (req, res) => {
     res.status(204).json(deleteUser);
 });
 
+routes.delete('/clients/:id', async (req, res) => {
+
+    const client = await db.oneOrNone(`SELECT * FROM clients WHERE clients.id = $(id)`, {
+        id: +req.params.id
+    })
+
+    if (!client) {
+        return res.status(404).send('Client ID not found')
+    }
+
+    const deleteClient = await db.none(`DELETE FROM clients WHERE clients.id = $(id)`, {
+        id: +req.params.id
+    })
+
+    res.status(204).json(deleteClient);
+
+})
+
 //VALIDATIONS========================================================
 
 function validateUser(user) {

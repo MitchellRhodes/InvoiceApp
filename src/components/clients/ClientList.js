@@ -9,6 +9,7 @@ function ClientList(props) {
 
                 <ClientItem
                     key={client.id}
+                    id={client.id}
                     first_name={client.first_name}
                     last_name={client.last_name}
                     company_name={client.company_name}
