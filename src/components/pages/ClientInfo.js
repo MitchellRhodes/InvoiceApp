@@ -16,7 +16,7 @@ function ClientInfoPage() {
 
     const [isLoading, setIsLoading] = useState(true);
     const [clientPostIsOpen, setClientPostIsOpen] = useState(false);
-    const [loadedClients, setLoadedClients] = useState({});
+    const [loadedClients, setLoadedClients] = useState([]);
     const [error, setError] = useState(null);
 
 
