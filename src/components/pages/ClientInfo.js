@@ -19,6 +19,7 @@ function ClientInfoPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [clientPostIsOpen, setClientPostIsOpen] = useState(false);
     const [error, setError] = useState(null);
+    const [loadedClients, setLoadedClients] = useState([])
 
 
 
@@ -47,7 +48,8 @@ function ClientInfoPage() {
 
                     setIsLoading(false);
                     setError(null);
-                    return clientContext.loadedClients = clients
+                    clientContext.loadedClients = clients
+                    return setLoadedClients(clients);
 
                 }).catch(err => {
 
@@ -74,7 +76,6 @@ function ClientInfoPage() {
                 }
 
                 clientContext.addClient(response.data);
-                // setLoadedClients(response.data);
 
             }).catch(err => {
 
@@ -104,7 +105,7 @@ function ClientInfoPage() {
                 {clientPostIsOpen ? <NewClient onConfirm={closeClientPost} onCancel={closeClientPost} updateClients={updateClientList} /> : null}
                 {clientPostIsOpen ? <Backdrop onClick={closeClientPost} /> : null}
             </div>
-            <ClientList clientInfo={clientContext.loadedClients} />
+            <ClientList clientInfo={loadedClients} />
 
         </section>
 
