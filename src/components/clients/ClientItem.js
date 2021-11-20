@@ -1,5 +1,6 @@
 import axios from "axios";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import LoadedClientsContext from "../../contexts/LoadedClientContext";
 import Backdrop from "../UI/Backdrop";
 import Card from "../UI/Card";
 import Modal from "../UI/Modal";
@@ -7,6 +8,7 @@ import Modal from "../UI/Modal";
 function ClientItem(props) {
 
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const clientContext = useContext(LoadedClientsContext);
 
     function openDeleteCard() {
         setModalIsOpen(true);
@@ -19,6 +21,7 @@ function ClientItem(props) {
     function removeClient(id) {
 
         axios.delete(`http://localhost:8080/clients/${id}`)
+        clientContext.removeClient(id);
         return closeDeleteCard();
     }
 

@@ -9,6 +9,7 @@ import FinalInvoicePage from './components/pages/FinalInvoice';
 import GenerateInvoicePage from './components/pages/GenerateInvoice';
 import LoginPage from './components/pages/LoginPage';
 import UserProfilePage from './components/pages/UserProfile';
+import { LoadedClientsContextProvider } from './contexts/LoadedClientContext';
 
 
 
@@ -22,15 +23,17 @@ function App() {
     <Layout>
 
       <UserContext.Provider value={userValue}>
-        <Routes>
+        <LoadedClientsContextProvider>
+          <Routes>
 
-          <Route path='/' element={<LoginPage />} />
-          <Route path='/user-profile' element={<UserProfilePage />} />
-          <Route path='/client' element={<ClientInfoPage />} />
-          <Route path='/generate-invoice' element={<GenerateInvoicePage />} />
-          <Route path='/finalize-invoice' element={<FinalInvoicePage />} />
+            <Route path='/' element={<LoginPage />} />
+            <Route path='/user-profile' element={<UserProfilePage />} />
+            <Route path='/client' element={<ClientInfoPage />} />
+            <Route path='/generate-invoice' element={<GenerateInvoicePage />} />
+            <Route path='/finalize-invoice' element={<FinalInvoicePage />} />
 
-        </Routes>
+          </Routes>
+        </LoadedClientsContextProvider>
       </UserContext.Provider>
     </Layout>
   );

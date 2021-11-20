@@ -6,6 +6,7 @@ import { UserContext } from '../../contexts/UserContext';
 import Backdrop from '../UI/Backdrop';
 import NewClient from "../clients/NewClient";
 import ClientList from "../clients/ClientList";
+import LoadedClientsContext from "../../contexts/LoadedClientContext";
 
 
 
@@ -13,11 +14,13 @@ function ClientInfoPage() {
 
     const { isAuthenticated } = useAuth0();
     const { loggedUser } = useContext(UserContext);
+    const clientContext = useContext(LoadedClientsContext);
 
     const [isLoading, setIsLoading] = useState(true);
     const [clientPostIsOpen, setClientPostIsOpen] = useState(false);
-    const [loadedClients, setLoadedClients] = useState([]);
     const [error, setError] = useState(null);
+
+
 
 
     useEffect(() => {
@@ -44,7 +47,7 @@ function ClientInfoPage() {
 
                     setIsLoading(false);
                     setError(null);
-                    return setLoadedClients(clients);
+                    return clientContext.loadedClients = clients
 
                 }).catch(err => {
 
@@ -56,7 +59,7 @@ function ClientInfoPage() {
             getClients();
         }
 
-    }, [isAuthenticated, loggedUser]);
+    }, [isAuthenticated, loggedUser, clientContext]);
 
 
     async function updateClientList(clientData) {
@@ -70,7 +73,8 @@ function ClientInfoPage() {
                     throw Error(response.statusText)
                 }
 
-                setLoadedClients(response.data);
+                clientContext.addClient(response.data);
+                // setLoadedClients(response.data);
 
             }).catch(err => {
 
@@ -100,7 +104,7 @@ function ClientInfoPage() {
                 {clientPostIsOpen ? <NewClient onConfirm={closeClientPost} onCancel={closeClientPost} updateClients={updateClientList} /> : null}
                 {clientPostIsOpen ? <Backdrop onClick={closeClientPost} /> : null}
             </div>
-            <ClientList clientInfo={loadedClients} />
+            <ClientList clientInfo={clientContext.loadedClients} />
 
         </section>
 
