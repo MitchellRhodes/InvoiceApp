@@ -1,7 +1,7 @@
 import classes from './Modal.module.css';
 
 
-function Modal(props) {
+function DeleteModal(props) {
 
     function cancelHandler() {
         props.onCancel();
@@ -20,4 +20,4 @@ function Modal(props) {
     )
 }
 
-export default Modal;
+export default DeleteModal;

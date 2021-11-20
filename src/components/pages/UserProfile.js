@@ -3,7 +3,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { useAuth0 } from '@auth0/auth0-react';
 import { Navigate } from 'react-router-dom';
 import axios from "axios";
-import Modal from "../UI/Modal";
+import DeleteModal from "../UI/DeleteModal";
 import Backdrop from "../UI/Backdrop";
 import Card from "../UI/Card";
 import classes from "../UI/forms.module.css";
@@ -184,7 +184,7 @@ function UserProfilePage() {
 
                 <button onClick={openUpdate}>Edit Profile</button>
                 <button onClick={openModal}>Delete Profile</button>
-                {modalIsOpen ? <Modal onCancel={closeModal} onRemove={deleteUser} /> : null}
+                {modalIsOpen ? <DeleteModal onCancel={closeModal} onRemove={deleteUser} /> : null}
                 {modalIsOpen ? <Backdrop onClick={closeModal} /> : null}
 
                 {updateCardIsOpen ?

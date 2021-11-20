@@ -136,6 +136,46 @@ routes.put('/users/:id', async (req, res) => {
 
 });
 
+routes.put('/clients/:id', async (req, res) => {
+
+    const client = await db.oneOrNone(`SELECT * FROM clients WHERE clients.id=$(id)`, {
+        id: +req.params.id
+    })
+
+    if (!client) {
+        res.status(404).send('Client was not found')
+    }
+
+    const validation = validateUserUpdate(req.body);
+
+    if (validation.error) {
+        return res.status(400).send(validation.error.details[0].message);
+    }
+
+    await db.oneOrNone(`UPDATE clients
+    SET
+    first_name = $(first_name),
+    last_name = $(last_name),
+    email = $(email),
+    phone_number = $(phone_number),
+    company_name = $(company_name)
+    WHERE id = $(id)`, {
+        id: +req.params.id,
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email: req.body.email,
+        phone_number: req.body.phone_number,
+        company_name: req.body.company_name
+    })
+
+    const updatedClient = await db.oneOrNone(`SELECT * FROM clients WHERE clients.id = $(id)`, {
+        id: +req.params.id
+    })
+
+    res.status(200).json(updatedClient);
+
+})
+
 
 
 //DELETE ROUTES=======================================================
@@ -191,6 +231,7 @@ function validateUser(user) {
     return schema.validate(user);
 };
 
+//Also for client updates
 function validateUserUpdate(user) {
     const schema = Joi.object({
         first_name: Joi.string().allow('', null),

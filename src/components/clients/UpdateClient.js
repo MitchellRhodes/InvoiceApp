@@ -1,10 +1,9 @@
 import { useRef } from 'react';
-import Card from '../UI/Card';
+import Card from "../UI/Card";
 import classes from "../UI/forms.module.css";
 
 
-function NewClient(props) {
-
+function UpdateClient(props) {
 
     const firstNameInputRef = useRef();
     const lastNameInputRef = useRef();
@@ -13,16 +12,39 @@ function NewClient(props) {
     const phoneNumberInputRef = useRef();
 
     function submitHandler(event) {
+
         event.preventDefault();
         props.onConfirm();
 
-        const enteredFirstName = firstNameInputRef.current.value
-        const enteredLastName = lastNameInputRef.current.value;
-        const enteredEmail = emailInputRef.current.value;
-        const enteredCompany = companyNameInputRef.current.value;
-        const enteredPhone = phoneNumberInputRef.current.value;
+        let enteredFirstName = firstNameInputRef.current.value;
+        let enteredLastName = lastNameInputRef.current.value;
+        let enteredEmail = emailInputRef.current.value;
+        let enteredCompany = companyNameInputRef.current.value;
+        let enteredPhone = phoneNumberInputRef.current.value;
 
-        const clientInfo = {
+
+        //right idea but I need to pass it down first cause they are undefined
+        if (!enteredFirstName) {
+            enteredFirstName = props.previousClient.first_name;
+        }
+
+        if (!enteredLastName) {
+            enteredLastName = props.previousClient.last_name;
+        }
+
+        if (!enteredEmail) {
+            enteredEmail = props.previousClient.email;
+        }
+
+        if (!enteredPhone) {
+            enteredPhone = props.previousClient.phone_number;
+        }
+
+        if (!enteredCompany) {
+            enteredCompany = props.previousClient.company_name;
+        }
+
+        const updatedClient = {
             first_name: enteredFirstName,
             last_name: enteredLastName,
             email: enteredEmail,
@@ -30,16 +52,17 @@ function NewClient(props) {
             phone_number: enteredPhone
         }
 
-        props.updateClients(clientInfo)
+        props.updateClientInfo(updatedClient, props.previousClient.id);
+
 
     }
 
     function cancelHandler() {
+
         props.onCancel();
     }
 
     return (
-
         <ul>
             <Card>
                 <form className={classes.form}>
@@ -64,7 +87,7 @@ function NewClient(props) {
                         <input type='text' id='phonenumber' ref={phoneNumberInputRef} />
                     </div>
                     <div className={classes.actions}>
-                        <button onClick={submitHandler}>Add Client</button>
+                        <button onClick={submitHandler}>Edit Client</button>
                         <button onClick={cancelHandler}>Cancel</button>
                     </div>
                 </form>
@@ -73,4 +96,4 @@ function NewClient(props) {
     )
 }
 
-export default NewClient;
+export default UpdateClient;
