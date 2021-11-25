@@ -78,11 +78,14 @@ function GenerateInvoicePage(props) {
                         <th>Hours</th>
                     </tr>
 
-                    <tr>
-                        {/* <td>{invoiceItems.item_name}</td>
-                        <td>{invoiceItems.charge_rate}</td>
-                        <td>{invoiceItems.hours}</td> */}
-                    </tr>
+
+                    {invoiceItems.map((item) => (
+                        <tr key={item.id}>
+                            <td>{item.item_name}</td>
+                            <td>{item.charge_rate}</td>
+                            <td>{item.hours}</td>
+                        </tr>
+                    ))}
                 </tbody>
             </table>
 
