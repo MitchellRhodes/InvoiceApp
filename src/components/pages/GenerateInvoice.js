@@ -48,7 +48,6 @@ function GenerateInvoicePage(props) {
             return previousState + 1
         })
 
-        //increment id with a state
         const newItem = {
             id: incrementID,
             item_name: enteredItemName,
@@ -61,10 +60,15 @@ function GenerateInvoicePage(props) {
             return currentItems.concat(newItem)
         });
 
-        console.log(invoiceItems)
         return closeAddItem();
     }
 
+    function removeInvoiceItem(itemId) {
+
+        setInvoiceItems((currentItems) => {
+            return currentItems.filter(item => item.id !== itemId)
+        })
+    };
 
     return (
         <section>
@@ -78,46 +82,53 @@ function GenerateInvoicePage(props) {
                         <th>Hours</th>
                     </tr>
 
-
                     {invoiceItems.map((item) => (
                         <tr key={item.id}>
                             <td>{item.item_name}</td>
                             <td>{item.charge_rate}</td>
                             <td>{item.hours}</td>
+                            <td>
+                                <button>Edit</button>
+                            </td>
+                            <td>
+                                <button onClick={() => { removeInvoiceItem(item.id) }}>Remove</button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
 
             <button onClick={openAddItem}>Add Item</button>
-            {addItemIsOpen ?
-                <ul>
-                    <Card>
-                        <form className={classes.form}>
-                            <div className={classes.control}>
-                                <label htmlFor='Item Name'>Item Name</label>
-                                <input type='text' id='itemname' ref={itemNameInputRef} />
-                            </div>
-                            <div className={classes.control}>
-                                <label htmlFor='Charge Rate'>Charge Rate</label>
-                                <input type='text' id='chargerate' ref={chargeRateInputRef} />
-                            </div>
-                            <div className={classes.control}>
-                                <label htmlFor='Hours Worked'>Hours Worked</label>
-                                <input type='text' id='hoursworked' ref={hoursWorkedInputRef} />
-                            </div>
-                            <div className={classes.actions}>
-                                <button onClick={addNewItem}>Add Item</button>
-                                <button onClick={closeAddItem}>Cancel</button>
-                            </div>
-                        </form>
-                    </Card>
-                </ul>
-                : null}
+            {
+                addItemIsOpen ?
+                    <ul>
+                        <Card>
+                            <form className={classes.form}>
+                                <div className={classes.control}>
+                                    <label htmlFor='Item Name'>Item Name</label>
+                                    <input type='text' id='itemname' ref={itemNameInputRef} />
+                                </div>
+                                <div className={classes.control}>
+                                    <label htmlFor='Charge Rate'>Charge Rate</label>
+                                    <input type='text' id='chargerate' ref={chargeRateInputRef} />
+                                </div>
+                                <div className={classes.control}>
+                                    <label htmlFor='Hours Worked'>Hours Worked</label>
+                                    <input type='text' id='hoursworked' ref={hoursWorkedInputRef} />
+                                </div>
+                                <div className={classes.actions}>
+                                    <button onClick={addNewItem}>Add Item</button>
+                                    <button onClick={closeAddItem}>Cancel</button>
+                                </div>
+                            </form>
+                        </Card>
+                    </ul>
+                    : null
+            }
             {addItemIsOpen ? <Backdrop onClick={closeAddItem} /> : null}
 
 
-        </section>
+        </section >
     )
 }
 
