@@ -30,7 +30,7 @@ function MainNavigation() {
                     </li>
 
                     <li>
-                        <Link to='/client'>Add Client</Link>
+                        <Link to='/client'>Clients</Link>
                     </li>
 
                     <li>

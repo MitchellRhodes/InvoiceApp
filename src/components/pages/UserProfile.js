@@ -12,17 +12,19 @@ import { UserContext } from "../../contexts/UserContext";
 
 function UserProfilePage() {
 
+    //contexts
     const { user, isAuthenticated, logout } = useAuth0();
     const { loggedUser, setLoggedUser } = useContext(UserContext);
 
+    //states
     const [isLoading, setIsLoading] = useState(true);
     const [loadedUser, setLoadedUser] = useState({});
     const [error, setError] = useState(null);
-
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [updateCardIsOpen, setUpdateCardIsOpen] = useState(false);
 
 
+    //refs
     const firstNameInputRef = useRef();
     const lastNameInputRef = useRef();
     const emailInputRef = useRef();

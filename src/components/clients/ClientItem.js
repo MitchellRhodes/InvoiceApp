@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import LoadedClientsContext from "../../contexts/LoadedClientContext";
 import Backdrop from "../UI/Backdrop";
 import Card from "../UI/Card";
@@ -71,8 +72,15 @@ function ClientItem(props) {
                     <h5><span>Email: </span>{props.email}</h5>
                     <h5><span>Phone: </span>{props.phone_number}</h5>
                 </div>
+
+                <button>View {props.first_name}'s Invoices</button>
+
+                <button>
+                    <Link to='/generate-invoice'>Create Invoice</Link>
+                </button>
+
                 <button onClick={openUpdateCard}>Edit Client</button>
-                {updateIsOpen ? <UpdateClient onCancel={closeUpdateCard} onConfirm={closeUpdateCard} updateClientInfo={updateClientInfo} previousClient={props} /> : null}
+                {updateIsOpen ? <UpdateClient onCancel={closeUpdateCard} onConfirm={closeUpdateCard} updateClientInfo={updateClientInfo} currentClient={props} /> : null}
                 {updateIsOpen ? <Backdrop onClick={closeUpdateCard} /> : null}
 
                 <button onClick={openDeleteCard}>Remove Client</button>

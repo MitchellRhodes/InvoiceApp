@@ -12,10 +12,12 @@ import LoadedClientsContext from "../../contexts/LoadedClientContext";
 
 function ClientInfoPage() {
 
+    //contexts
     const { isAuthenticated } = useAuth0();
     const { loggedUser } = useContext(UserContext);
     const clientContext = useContext(LoadedClientsContext);
 
+    //states
     const [isLoading, setIsLoading] = useState(true);
     const [clientPostIsOpen, setClientPostIsOpen] = useState(false);
     const [error, setError] = useState(null);

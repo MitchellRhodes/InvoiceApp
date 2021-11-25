@@ -23,25 +23,24 @@ function UpdateClient(props) {
         let enteredPhone = phoneNumberInputRef.current.value;
 
 
-        //right idea but I need to pass it down first cause they are undefined
         if (!enteredFirstName) {
-            enteredFirstName = props.previousClient.first_name;
+            enteredFirstName = props.currentClient.first_name;
         }
 
         if (!enteredLastName) {
-            enteredLastName = props.previousClient.last_name;
+            enteredLastName = props.currentClient.last_name;
         }
 
         if (!enteredEmail) {
-            enteredEmail = props.previousClient.email;
+            enteredEmail = props.currentClient.email;
         }
 
         if (!enteredPhone) {
-            enteredPhone = props.previousClient.phone_number;
+            enteredPhone = props.currentClient.phone_number;
         }
 
         if (!enteredCompany) {
-            enteredCompany = props.previousClient.company_name;
+            enteredCompany = props.currentClient.company_name;
         }
 
         const updatedClient = {
@@ -52,7 +51,7 @@ function UpdateClient(props) {
             phone_number: enteredPhone
         }
 
-        props.updateClientInfo(updatedClient, props.previousClient.id);
+        props.updateClientInfo(updatedClient, props.currentClient.id);
 
 
     }

@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 
 function FinalInvoicePage() {
 
+    //contexts
     const { isAuthenticated } = useAuth0();
 
     if (!isAuthenticated) {

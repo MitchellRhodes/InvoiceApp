@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom';
 
 function LoginPage() {
 
+    //contexts
     const { isAuthenticated } = useAuth0();
 
     if (isAuthenticated) {
