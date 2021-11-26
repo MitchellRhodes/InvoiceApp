@@ -1,11 +1,12 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { useState, useRef } from 'react';
-import { Navigate } from 'react-router-dom';
+import { useState, useRef, useEffect } from 'react';
+import { Navigate, useParams } from 'react-router-dom';
 import Backdrop from '../UI/Backdrop';
 import Card from "../UI/Card";
 import classes from "../UI/forms.module.css";
 
-function GenerateInvoicePage(props) {
+
+function GenerateInvoicePage() {
 
     //context
     const { isAuthenticated } = useAuth0();
@@ -14,11 +15,32 @@ function GenerateInvoicePage(props) {
     const [addItemIsOpen, setAddItemIsOpen] = useState(false);
     const [invoiceItems, setInvoiceItems] = useState([]);
     const [incrementID, setIncrementID] = useState(1);
+    const [cost, setCost] = useState(0);
 
     //Refs
     const itemNameInputRef = useRef();
     const chargeRateInputRef = useRef();
     const hoursWorkedInputRef = useRef();
+
+    const { clientId } = useParams();
+
+
+    useEffect(() => {
+
+        let total = 0;
+
+        invoiceItems.forEach(item =>
+            total += item.charge_rate * item.hours
+        );
+
+        let tax = total * 0.06;
+        let finalCost = total + tax;
+        console.log(finalCost);
+
+        return setCost(finalCost);
+
+    }, [cost, invoiceItems])
+
 
     if (!isAuthenticated) {
 
@@ -31,10 +53,12 @@ function GenerateInvoicePage(props) {
         return setAddItemIsOpen(true);
     }
 
+
     function closeAddItem() {
 
         return setAddItemIsOpen(false);
     }
+
 
     function addNewItem(event) {
 
@@ -63,12 +87,14 @@ function GenerateInvoicePage(props) {
         return closeAddItem();
     }
 
+
     function removeInvoiceItem(itemId) {
 
         setInvoiceItems((currentItems) => {
             return currentItems.filter(item => item.id !== itemId)
         })
     };
+
 
     return (
         <section>
@@ -85,11 +111,8 @@ function GenerateInvoicePage(props) {
                     {invoiceItems.map((item) => (
                         <tr key={item.id}>
                             <td>{item.item_name}</td>
-                            <td>{item.charge_rate}</td>
+                            <td>${item.charge_rate}</td>
                             <td>{item.hours}</td>
-                            <td>
-                                <button>Edit</button>
-                            </td>
                             <td>
                                 <button onClick={() => { removeInvoiceItem(item.id) }}>Remove</button>
                             </td>
@@ -127,6 +150,9 @@ function GenerateInvoicePage(props) {
             }
             {addItemIsOpen ? <Backdrop onClick={closeAddItem} /> : null}
 
+            <h3>Total: ${cost}</h3>
+
+            <button>Finalize</button>
 
         </section >
     )

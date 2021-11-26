@@ -33,9 +33,9 @@ function MainNavigation() {
                         <Link to='/client'>Clients</Link>
                     </li>
 
-                    <li>
+                    {/* <li>
                         <Link to='/generate-invoice'>Generate Invoice</Link>
-                    </li>
+                    </li> */}
 
                     <li>
                         <Link to='/finalize-invoice'>Final Invoice</Link>

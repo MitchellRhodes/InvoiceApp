@@ -75,9 +75,9 @@ function ClientItem(props) {
 
                 <button>View {props.first_name}'s Invoices</button>
 
-                <button>
-                    <Link to='/generate-invoice'>Create Invoice</Link>
-                </button>
+                <Link to={`/generate-invoice/${props.id}`}>
+                    <button>Create Invoice</button>
+                </Link>
 
                 <button onClick={openUpdateCard}>Edit Client</button>
                 {updateIsOpen ? <UpdateClient onCancel={closeUpdateCard} onConfirm={closeUpdateCard} updateClientInfo={updateClientInfo} currentClient={props} /> : null}

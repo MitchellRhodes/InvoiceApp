@@ -29,7 +29,7 @@ function App() {
             <Route path='/' element={<LoginPage />} />
             <Route path='/user-profile' element={<UserProfilePage />} />
             <Route path='/client' element={<ClientInfoPage />} />
-            <Route path='/generate-invoice' element={<GenerateInvoicePage />} />
+            <Route path='/generate-invoice/:clientId' element={<GenerateInvoicePage />} />
             <Route path='/finalize-invoice' element={<FinalInvoicePage />} />
 
           </Routes>
