@@ -20,7 +20,7 @@ function GenerateInvoicePage() {
     //Refs
     const itemNameInputRef = useRef();
     const chargeRateInputRef = useRef();
-    const hoursWorkedInputRef = useRef();
+    const quantityInputRef = useRef();
 
     const { clientId } = useParams();
 
@@ -30,14 +30,14 @@ function GenerateInvoicePage() {
         let total = 0;
 
         invoiceItems.forEach(item =>
-            total += item.charge_rate * item.hours
+            total += item.rate * item.quantity
         );
 
         let tax = total * 0.06;
         let finalCost = total + tax;
-        console.log(finalCost);
+        let roundedCost = finalCost.toFixed(2);
 
-        return setCost(finalCost);
+        return setCost(roundedCost);
 
     }, [cost, invoiceItems])
 
@@ -66,7 +66,7 @@ function GenerateInvoicePage() {
 
         let enteredItemName = itemNameInputRef.current.value;
         let enteredChargeRate = chargeRateInputRef.current.value;
-        let enteredHours = hoursWorkedInputRef.current.value;
+        let enteredQuantity = quantityInputRef.current.value;
 
         setIncrementID(previousState => {
             return previousState + 1
@@ -74,9 +74,9 @@ function GenerateInvoicePage() {
 
         const newItem = {
             id: incrementID,
-            item_name: enteredItemName,
-            charge_rate: enteredChargeRate,
-            hours: enteredHours
+            item: enteredItemName,
+            rate: enteredChargeRate,
+            quantity: enteredQuantity
         }
 
         setInvoiceItems((currentItems) => {
@@ -105,14 +105,14 @@ function GenerateInvoicePage() {
                     <tr>
                         <th>Item</th>
                         <th>Rate</th>
-                        <th>Hours</th>
+                        <th>Quantity</th>
                     </tr>
 
                     {invoiceItems.map((item) => (
                         <tr key={item.id}>
-                            <td>{item.item_name}</td>
-                            <td>${item.charge_rate}</td>
-                            <td>{item.hours}</td>
+                            <td>{item.item}</td>
+                            <td>${item.rate}</td>
+                            <td>{item.quantity}</td>
                             <td>
                                 <button onClick={() => { removeInvoiceItem(item.id) }}>Remove</button>
                             </td>
@@ -136,8 +136,8 @@ function GenerateInvoicePage() {
                                     <input type='text' id='chargerate' ref={chargeRateInputRef} />
                                 </div>
                                 <div className={classes.control}>
-                                    <label htmlFor='Hours Worked'>Hours Worked</label>
-                                    <input type='text' id='hoursworked' ref={hoursWorkedInputRef} />
+                                    <label htmlFor='Quantity'>Quantity</label>
+                                    <input type='text' id='quantity' ref={quantityInputRef} />
                                 </div>
                                 <div className={classes.actions}>
                                     <button onClick={addNewItem}>Add Item</button>

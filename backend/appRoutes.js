@@ -20,6 +20,13 @@ routes.get('/users', async (req, res) => {
     res.status(200).json(users);
 })
 
+//get list of all invoices(FOR DEV PURPOSES)
+routes.get('/invoices', async (req, res) => {
+    const invoices = await db.manyOrNone(`SELECT * FROM invoices`);
+
+    res.status(200).json(invoices);
+})
+
 //get specific user with email
 routes.get('/users/:email', async (req, res) => {
     const user = await db.oneOrNone(`SELECT * FROM users WHERE users.email= $(email)`, {
@@ -48,6 +55,7 @@ routes.get('/clients/:id', async (req, res) => {
 
 //POST ROUTES============================================================
 
+//New User
 routes.post('/users', async (req, res) => {
 
     const validation = validateUser(req.body);
@@ -67,6 +75,7 @@ routes.post('/users', async (req, res) => {
     res.status(201).json(newUser);
 });
 
+//New Client
 routes.post('/clients/:id', async (req, res) => {
 
     const validation = validateClient(req.body);
@@ -93,6 +102,35 @@ routes.post('/clients/:id', async (req, res) => {
 
     res.status(201).json(newClient);
 })
+
+
+//New Invoice for specific client
+routes.post('/invoices/:id', async (req, res) => {
+
+    const validation = validateInvoice(req.body);
+
+    if (validation.error) {
+        return res.status(400).send(validation.error.details[0].message)
+    }
+
+    await db.none(`INSERT INTO invoices(
+        client_id,item,rate,quantity)
+        VALUES(
+            $(client_id),$(item),$(rate),$(quantity)
+        )`, {
+        client_id: +req.params.id,
+        item: req.body.item,
+        rate: req.body.rate,
+        quantity: req.body.quantity
+    })
+
+
+    const newInvoice = await db.manyOrNone(`SELECT * FROM invoices WHERE client_id = $(id)`, {
+        id: +req.params.id
+    })
+
+    return res.status(201).json(newInvoice)
+});
 
 //PUT ROUTES=========================================================
 
@@ -256,4 +294,19 @@ function validateClient(client) {
 
     return schema.validate(client);
 };
+
+
+function validateInvoice(invoice) {
+
+    const schema = Joi.object({
+        item: Joi.string().min(1).required(),
+        rate: Joi.number().precision(2).required(),
+        quantity: Joi.number().min(1).required()
+    });
+
+    return schema.validate(invoice);
+}
+
+
+
 module.exports = routes;
