@@ -1,10 +1,15 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { Navigate } from 'react-router-dom';
+import Card from '../UI/Card';
+import classes from "../UI/forms.module.css";
 
-function FinalInvoicePage() {
+
+function FinalInvoicePage(props) {
 
     //contexts
     const { isAuthenticated } = useAuth0();
+
+    const client = props.chosenClient
 
     if (!isAuthenticated) {
 
@@ -12,12 +17,26 @@ function FinalInvoicePage() {
 
     }
 
+    function cancelHandler() {
+
+        props.onCancel();
+    }
+
     return (
-        <section>
-            <h1>Final Invoice</h1>
-            <button>Send Invoice</button>
-            <button>Cancel</button>
-        </section>
+        <ul>
+            <Card>
+                <form className={classes.form}>
+                    <div className={classes.control}>
+                        <h1>{client.first_name} {client.last_name}</h1>
+                    </div>
+                    <div className={classes.actions}>
+                        <button>Send Invoice</button>
+                        <button onClick={cancelHandler}>Cancel</button>
+                    </div>
+                </form>
+            </Card>
+        </ul>
+
 
     )
 }

@@ -129,7 +129,7 @@ function GenerateInvoicePage() {
 
     return (
         <section>
-            <h3>Generate Invoice for {chosenClient.first_name} {chosenClient.last_name}</h3>
+            <h3>Create Invoice for {chosenClient.first_name} {chosenClient.last_name}</h3>
 
             <table>
                 <tbody>
@@ -184,7 +184,7 @@ function GenerateInvoicePage() {
             <h3>Total: ${cost}</h3>
 
             <button onClick={openFinalizeInvoice}>Finalize</button>
-            {finalizeInvoice ? <FinalInvoicePage onSend={closeFinalizeInvoice} onCancel={closeFinalizeInvoice} /> : null}
+            {finalizeInvoice ? <FinalInvoicePage onSend={closeFinalizeInvoice} onCancel={closeFinalizeInvoice} chosenClient={chosenClient} /> : null}
             {finalizeInvoice ? <Backdrop onClick={closeFinalizeInvoice} /> : null}
 
 
