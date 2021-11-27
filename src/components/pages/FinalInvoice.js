@@ -13,7 +13,12 @@ function FinalInvoicePage() {
     }
 
     return (
-        <h1>Final Invoice</h1>
+        <section>
+            <h1>Final Invoice</h1>
+            <button>Send Invoice</button>
+            <button>Cancel</button>
+        </section>
+
     )
 }
 

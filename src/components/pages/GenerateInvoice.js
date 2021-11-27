@@ -1,45 +1,67 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useContext } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
+import LoadedClientsContext from '../../contexts/LoadedClientContext';
 import Backdrop from '../UI/Backdrop';
 import Card from "../UI/Card";
 import classes from "../UI/forms.module.css";
+import FinalInvoicePage from './FinalInvoice';
 
 
 function GenerateInvoicePage() {
 
     //context
     const { isAuthenticated } = useAuth0();
+    const clientContext = useContext(LoadedClientsContext);
+
 
     //states
     const [addItemIsOpen, setAddItemIsOpen] = useState(false);
     const [invoiceItems, setInvoiceItems] = useState([]);
     const [incrementID, setIncrementID] = useState(1);
     const [cost, setCost] = useState(0);
+    const [finalizeInvoice, setFinalizeInvoice] = useState(false);
+    const [chosenClient, setChosenClient] = useState({});
 
     //Refs
     const itemNameInputRef = useRef();
     const chargeRateInputRef = useRef();
     const quantityInputRef = useRef();
 
+
+    //Need to access the loadedClients context and use this id to get the specific client then pass it to finalize INvoice
     const { clientId } = useParams();
 
 
     useEffect(() => {
 
-        let total = 0;
 
-        invoiceItems.forEach(item =>
-            total += item.rate * item.quantity
-        );
+        function getTotal() {
+            let total = 0;
 
-        let tax = total * 0.06;
-        let finalCost = total + tax;
-        let roundedCost = finalCost.toFixed(2);
+            invoiceItems.forEach(item =>
+                total += item.rate * item.quantity
+            );
 
-        return setCost(roundedCost);
+            let tax = total * 0.06;
+            let finalCost = total + tax;
+            let roundedCost = finalCost.toFixed(2);
 
-    }, [cost, invoiceItems])
+
+            return setCost(roundedCost);
+        }
+
+        function getClient() {
+
+            let chosen = clientContext.loadedClients.find(client => client.id === +clientId);
+
+            return setChosenClient(chosen);
+        }
+
+        getClient();
+        getTotal();
+
+    }, [cost, invoiceItems, clientId, clientContext.loadedClients])
 
 
     if (!isAuthenticated) {
@@ -59,6 +81,15 @@ function GenerateInvoicePage() {
         return setAddItemIsOpen(false);
     }
 
+    function openFinalizeInvoice() {
+
+        return setFinalizeInvoice(true);
+    }
+
+    function closeFinalizeInvoice() {
+
+        return setFinalizeInvoice(false);
+    }
 
     function addNewItem(event) {
 
@@ -98,7 +129,7 @@ function GenerateInvoicePage() {
 
     return (
         <section>
-            <h3>Generate Invoice</h3>
+            <h3>Generate Invoice for {chosenClient.first_name} {chosenClient.last_name}</h3>
 
             <table>
                 <tbody>
@@ -152,7 +183,10 @@ function GenerateInvoicePage() {
 
             <h3>Total: ${cost}</h3>
 
-            <button>Finalize</button>
+            <button onClick={openFinalizeInvoice}>Finalize</button>
+            {finalizeInvoice ? <FinalInvoicePage onSend={closeFinalizeInvoice} onCancel={closeFinalizeInvoice} /> : null}
+            {finalizeInvoice ? <Backdrop onClick={closeFinalizeInvoice} /> : null}
+
 
         </section >
     )

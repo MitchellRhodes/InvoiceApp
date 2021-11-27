@@ -37,9 +37,9 @@ function MainNavigation() {
                         <Link to='/generate-invoice'>Generate Invoice</Link>
                     </li> */}
 
-                    <li>
+                    {/* <li>
                         <Link to='/finalize-invoice'>Final Invoice</Link>
-                    </li>
+                    </li> */}
                     <li>
                         <LoginButton />
                         <LogoutButton />
