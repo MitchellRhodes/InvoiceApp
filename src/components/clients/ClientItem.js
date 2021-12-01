@@ -10,6 +10,7 @@ import UpdateClient from "./UpdateClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import classes from "./ClientItem.module.css";
 
 
 function ClientItem(props) {
@@ -84,11 +85,11 @@ function ClientItem(props) {
                     <button>Create Invoice</button>
                 </Link>
 
-                <FontAwesomeIcon icon={faEdit} onClick={openUpdateCard}></FontAwesomeIcon>
+                <FontAwesomeIcon icon={faEdit} onClick={openUpdateCard} className={classes.icon}></FontAwesomeIcon>
                 {updateIsOpen ? <UpdateClient onCancel={closeUpdateCard} onConfirm={closeUpdateCard} updateClientInfo={updateClientInfo} currentClient={props} /> : null}
                 {updateIsOpen ? <Backdrop onClick={closeUpdateCard} /> : null}
 
-                <FontAwesomeIcon icon={faTrashAlt} onClick={openDeleteCard}></FontAwesomeIcon>
+                <FontAwesomeIcon icon={faTrashAlt} onClick={openDeleteCard} className={classes.icon}></FontAwesomeIcon>
                 {modalIsOpen ? <DeleteModal onCancel={closeDeleteCard} onRemove={() => removeClient(props.id)} /> : null}
                 {modalIsOpen ? <Backdrop onClick={closeDeleteCard} /> : null}
             </Card>
