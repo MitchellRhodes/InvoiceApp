@@ -6,6 +6,8 @@ import Backdrop from '../UI/Backdrop';
 import Card from "../UI/Card";
 import classes from "../UI/forms.module.css";
 import FinalInvoicePage from './FinalInvoice';
+// import axios from "axios";
+
 
 
 function GenerateInvoicePage() {
@@ -22,6 +24,8 @@ function GenerateInvoicePage() {
     const [cost, setCost] = useState(0);
     const [finalizeInvoice, setFinalizeInvoice] = useState(false);
     const [chosenClient, setChosenClient] = useState({});
+    // const [error, setError] = useState(null);
+
 
     //Refs
     const itemNameInputRef = useRef();
@@ -75,7 +79,6 @@ function GenerateInvoicePage() {
         return setAddItemIsOpen(true);
     }
 
-
     function closeAddItem() {
 
         return setAddItemIsOpen(false);
@@ -110,6 +113,8 @@ function GenerateInvoicePage() {
             quantity: enteredQuantity
         }
 
+        //post new Item to database
+
         setInvoiceItems((currentItems) => {
 
             return currentItems.concat(newItem)
@@ -126,6 +131,11 @@ function GenerateInvoicePage() {
         })
     };
 
+
+    async function postInvoice() {
+        //come back to after fixing database with invoice items
+        return closeFinalizeInvoice();
+    }
 
     return (
         <section>
@@ -184,7 +194,7 @@ function GenerateInvoicePage() {
             <h3>Total: ${cost}</h3>
 
             <button onClick={openFinalizeInvoice}>Finalize</button>
-            {finalizeInvoice ? <FinalInvoicePage onSend={closeFinalizeInvoice} onCancel={closeFinalizeInvoice} chosenClient={chosenClient} /> : null}
+            {finalizeInvoice ? <FinalInvoicePage onSend={postInvoice} onCancel={closeFinalizeInvoice} chosenClient={chosenClient} /> : null}
             {finalizeInvoice ? <Backdrop onClick={closeFinalizeInvoice} /> : null}
 
 

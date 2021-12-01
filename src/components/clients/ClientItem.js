@@ -7,6 +7,11 @@ import Card from "../UI/Card";
 import DeleteModal from "../UI/DeleteModal";
 import UpdateClient from "./UpdateClient";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
+
+
 function ClientItem(props) {
 
     //contexts
@@ -79,11 +84,11 @@ function ClientItem(props) {
                     <button>Create Invoice</button>
                 </Link>
 
-                <button onClick={openUpdateCard}>Edit Client</button>
+                <FontAwesomeIcon icon={faEdit} onClick={openUpdateCard}></FontAwesomeIcon>
                 {updateIsOpen ? <UpdateClient onCancel={closeUpdateCard} onConfirm={closeUpdateCard} updateClientInfo={updateClientInfo} currentClient={props} /> : null}
                 {updateIsOpen ? <Backdrop onClick={closeUpdateCard} /> : null}
 
-                <button onClick={openDeleteCard}>Remove Client</button>
+                <FontAwesomeIcon icon={faTrashAlt} onClick={openDeleteCard}></FontAwesomeIcon>
                 {modalIsOpen ? <DeleteModal onCancel={closeDeleteCard} onRemove={() => removeClient(props.id)} /> : null}
                 {modalIsOpen ? <Backdrop onClick={closeDeleteCard} /> : null}
             </Card>
