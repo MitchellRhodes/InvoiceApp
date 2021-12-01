@@ -79,19 +79,21 @@ function ClientItem(props) {
                     <h5><span>Phone: </span>{props.phone_number}</h5>
                 </div>
 
-                <button>View {props.first_name}'s Invoices</button>
+                <div className={classes.actions}>
+                    <button>View {props.first_name}'s Invoices</button>
 
-                <Link to={`/generate-invoice/${props.id}`}>
-                    <button>Create Invoice</button>
-                </Link>
+                    <Link to={`/generate-invoice/${props.id}`}>
+                        <button>Create Invoice</button>
+                    </Link>
 
-                <FontAwesomeIcon icon={faEdit} onClick={openUpdateCard} className={classes.icon}></FontAwesomeIcon>
-                {updateIsOpen ? <UpdateClient onCancel={closeUpdateCard} onConfirm={closeUpdateCard} updateClientInfo={updateClientInfo} currentClient={props} /> : null}
-                {updateIsOpen ? <Backdrop onClick={closeUpdateCard} /> : null}
+                    <FontAwesomeIcon icon={faEdit} onClick={openUpdateCard} className={classes.icon}></FontAwesomeIcon>
+                    {updateIsOpen ? <UpdateClient onCancel={closeUpdateCard} onConfirm={closeUpdateCard} updateClientInfo={updateClientInfo} currentClient={props} /> : null}
+                    {updateIsOpen ? <Backdrop onClick={closeUpdateCard} /> : null}
 
-                <FontAwesomeIcon icon={faTrashAlt} onClick={openDeleteCard} className={classes.icon}></FontAwesomeIcon>
-                {modalIsOpen ? <DeleteModal onCancel={closeDeleteCard} onRemove={() => removeClient(props.id)} /> : null}
-                {modalIsOpen ? <Backdrop onClick={closeDeleteCard} /> : null}
+                    <FontAwesomeIcon icon={faTrashAlt} onClick={openDeleteCard} className={classes.icon}></FontAwesomeIcon>
+                    {modalIsOpen ? <DeleteModal onCancel={closeDeleteCard} onRemove={() => removeClient(props.id)} /> : null}
+                    {modalIsOpen ? <Backdrop onClick={closeDeleteCard} /> : null}
+                </div>
             </Card>
         </ul>
     )
