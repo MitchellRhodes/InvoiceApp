@@ -1,12 +1,11 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { useState, useRef, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import LoadedClientsContext from '../../contexts/LoadedClientContext';
+import AddItem from '../invoices/AddItem';
 import Backdrop from '../UI/Backdrop';
-import Card from "../UI/Card";
-import classes from "../UI/forms.module.css";
 import FinalInvoicePage from './FinalInvoice';
-// import axios from "axios";
+import axios from "axios";
 
 
 
@@ -20,17 +19,14 @@ function GenerateInvoicePage() {
     //states
     const [addItemIsOpen, setAddItemIsOpen] = useState(false);
     const [invoiceItems, setInvoiceItems] = useState([]);
-    const [incrementID, setIncrementID] = useState(1);
     const [cost, setCost] = useState(0);
     const [finalizeInvoice, setFinalizeInvoice] = useState(false);
     const [chosenClient, setChosenClient] = useState({});
-    // const [error, setError] = useState(null);
+    const [error, setError] = useState(null);
 
 
     //Refs
-    const itemNameInputRef = useRef();
-    const chargeRateInputRef = useRef();
-    const quantityInputRef = useRef();
+    // const quantityInputRef = useRef();
 
 
     //Need to access the loadedClients context and use this id to get the specific client then pass it to finalize INvoice
@@ -94,33 +90,31 @@ function GenerateInvoicePage() {
         return setFinalizeInvoice(false);
     }
 
-    function addNewItem(event) {
 
-        event.preventDefault();
+    async function addNewItem(newItem) {
 
-        let enteredItemName = itemNameInputRef.current.value;
-        let enteredChargeRate = chargeRateInputRef.current.value;
-        let enteredQuantity = quantityInputRef.current.value;
+        await axios.post(`http://localhost:8080/items`, newItem)
 
-        setIncrementID(previousState => {
-            return previousState + 1
-        })
+            .then(response => {
 
-        const newItem = {
-            id: incrementID,
-            item: enteredItemName,
-            rate: enteredChargeRate,
-            quantity: enteredQuantity
-        }
+                if (response.statusText !== 'Created') {
 
-        //post new Item to database
+                    throw Error(response.statusText)
+                }
 
-        setInvoiceItems((currentItems) => {
+                console.log(response.data);
+                // setInvoiceItems(response.data);
+                // setInvoiceItems((currentItems) => {
 
-            return currentItems.concat(newItem)
-        });
+                //     return currentItems.concat(newItem)
+                // });
 
-        return closeAddItem();
+            }).catch(err => {
+
+                setError(err.message);
+                console.log(error)
+            })
+
     }
 
 
@@ -149,7 +143,7 @@ function GenerateInvoicePage() {
                         <th>Quantity</th>
                     </tr>
 
-                    {invoiceItems.map((item) => (
+                    {/* {invoiceItems.map((item) => (
                         <tr key={item.id}>
                             <td>{item.item}</td>
                             <td>${item.rate}</td>
@@ -158,37 +152,12 @@ function GenerateInvoicePage() {
                                 <button onClick={() => { removeInvoiceItem(item.id) }}>Remove</button>
                             </td>
                         </tr>
-                    ))}
+                    ))} */}
                 </tbody>
             </table>
 
             <button onClick={openAddItem}>Add Item</button>
-            {
-                addItemIsOpen ?
-                    <ul>
-                        <Card>
-                            <form className={classes.form}>
-                                <div className={classes.control}>
-                                    <label htmlFor='Item Name'>Item Name</label>
-                                    <input type='text' id='itemname' ref={itemNameInputRef} />
-                                </div>
-                                <div className={classes.control}>
-                                    <label htmlFor='Charge Rate'>Charge Rate</label>
-                                    <input type='text' id='chargerate' ref={chargeRateInputRef} />
-                                </div>
-                                <div className={classes.control}>
-                                    <label htmlFor='Quantity'>Quantity</label>
-                                    <input type='text' id='quantity' ref={quantityInputRef} />
-                                </div>
-                                <div className={classes.actions}>
-                                    <button onClick={addNewItem}>Add Item</button>
-                                    <button onClick={closeAddItem}>Cancel</button>
-                                </div>
-                            </form>
-                        </Card>
-                    </ul>
-                    : null
-            }
+            {addItemIsOpen ? <AddItem onConfirm={closeAddItem} onCancel={closeAddItem} updateItems={addNewItem} /> : null}
             {addItemIsOpen ? <Backdrop onClick={closeAddItem} /> : null}
 
             <h3>Total: ${cost}</h3>

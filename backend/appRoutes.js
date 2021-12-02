@@ -104,33 +104,57 @@ routes.post('/clients/:id', async (req, res) => {
 })
 
 
-//New Invoice for specific client
-routes.post('/invoices/:id', async (req, res) => {
+//post new item
+routes.post('/items', async (req, res) => {
 
-    const validation = validateInvoice(req.body);
+    const validation = validateItem(req.body);
 
     if (validation.error) {
         return res.status(400).send(validation.error.details[0].message)
     }
 
-    await db.none(`INSERT INTO invoices(
-        client_id,item,rate,quantity)
-        VALUES(
-            $(client_id),$(item),$(rate),$(quantity)
-        )`, {
-        client_id: +req.params.id,
+    await db.none(`INSERT INTO items(item,rate)
+        VALUES($(item),$(rate))`, {
         item: req.body.item,
-        rate: req.body.rate,
-        quantity: req.body.quantity
+        rate: req.body.rate
     })
 
-
-    const newInvoice = await db.manyOrNone(`SELECT * FROM invoices WHERE client_id = $(id)`, {
-        id: +req.params.id
+    const newItem = await db.oneOrNone(`SELECT * FROM items WHERE items.item = $(item) AND items.rate = $(rate)`, {
+        item: req.body.item,
+        rate: req.body.rate
     })
 
-    return res.status(201).json(newInvoice)
-});
+    return res.status(201).json(newItem);
+})
+
+
+//New Invoice for specific client(REDO THIS IS INCORRECT NOW)
+// routes.post('/invoices/:id', async (req, res) => {
+
+//     const validation = validateInvoice(req.body);
+
+//     if (validation.error) {
+//         return res.status(400).send(validation.error.details[0].message)
+//     }
+
+//     await db.none(`INSERT INTO invoices(
+//         client_id,item,rate,quantity)
+//         VALUES(
+//             $(client_id),$(item),$(rate),$(quantity)
+//         )`, {
+//         client_id: +req.params.id,
+//         item: req.body.item,
+//         rate: req.body.rate,
+//         quantity: req.body.quantity
+//     })
+
+
+//     const newInvoice = await db.manyOrNone(`SELECT * FROM invoices WHERE client_id = $(id)`, {
+//         id: +req.params.id
+//     })
+
+//     return res.status(201).json(newInvoice)
+// });
 
 //PUT ROUTES=========================================================
 
@@ -295,16 +319,14 @@ function validateClient(client) {
     return schema.validate(client);
 };
 
-
-function validateInvoice(invoice) {
+function validateItem(item) {
 
     const schema = Joi.object({
         item: Joi.string().min(1).required(),
-        rate: Joi.number().precision(2).required(),
-        quantity: Joi.number().min(1).required()
+        rate: Joi.number().precision(2).required()
     });
 
-    return schema.validate(invoice);
+    return schema.validate(item);
 }
 
 
