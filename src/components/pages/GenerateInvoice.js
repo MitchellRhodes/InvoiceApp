@@ -7,6 +7,8 @@ import Backdrop from '../UI/Backdrop';
 import FinalInvoicePage from './FinalInvoice';
 import axios from "axios";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 
 function GenerateInvoicePage() {
@@ -23,10 +25,6 @@ function GenerateInvoicePage() {
     const [finalizeInvoice, setFinalizeInvoice] = useState(false);
     const [chosenClient, setChosenClient] = useState({});
     const [error, setError] = useState(null);
-
-
-    //Refs
-    // const quantityInputRef = useRef();
 
     //Need to access the loadedClients context and use this id to get the specific client then pass it to finalize INvoice
     const { clientId } = useParams();
@@ -142,13 +140,6 @@ function GenerateInvoicePage() {
         return closeFinalizeInvoice();
     }
 
-    // function quantityChange() {
-
-    //     invoiceItems.forEach(item =>
-    //         total += item.rate * item.quantity
-    //     );
-
-    // }
 
     return (
         <section>
@@ -167,11 +158,8 @@ function GenerateInvoicePage() {
                             <td>{item.item}</td>
                             <td>{item.rate}</td>
                             <td>{item.quantity}</td>
-                            {/* <td>
-                                <input type='number' id='quantity' ref={quantityInputRef} onChange={quantityChange}></input>
-                            </td> */}
                             <td>
-                                <button onClick={() => { removeInvoiceItem(item.id) }}>Remove</button>
+                                <FontAwesomeIcon icon={faTrashAlt} onClick={() => { removeInvoiceItem(item.id) }}></FontAwesomeIcon>
                             </td>
                         </tr>
                     ))}
