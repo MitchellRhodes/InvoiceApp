@@ -277,6 +277,32 @@ routes.delete('/clients/:id', async (req, res) => {
 
 })
 
+//DELETE ALL ITEMS (CURRENTLY USED FOR DEV PURPOSES BUT MAYBE HAVE IT TO WHERE THEY DELETE ON INVOICE POST)
+routes.delete('/items/', async (req, res) => {
+
+    const deleteAllItems = await db.none(`DELETE * FROM items`)
+
+    res.status(204).json(deleteAllItems);
+})
+
+//DELETE A SPECIFIC ITEM
+routes.delete('/items/:id', async (req, res) => {
+
+    const item = await db.oneOrNone(`SELECT * FROM items WHERE items.id = $(id)`, {
+        id: +req.params.id
+    })
+
+    if (!item) {
+        return res.status(404).send('Item ID not found')
+    }
+
+    const deleteItem = await db.none(`DELETE FROM items WHERE items.id = $(id)`, {
+        id: +req.params.id
+    })
+
+    res.status(204).json(deleteItem);
+})
+
 //VALIDATIONS========================================================
 
 function validateUser(user) {

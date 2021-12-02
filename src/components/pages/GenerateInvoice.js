@@ -102,12 +102,10 @@ function GenerateInvoicePage() {
                     throw Error(response.statusText)
                 }
 
-                console.log(response.data);
-                // setInvoiceItems(response.data);
-                // setInvoiceItems((currentItems) => {
+                setInvoiceItems((currentItems) => {
 
-                //     return currentItems.concat(newItem)
-                // });
+                    return currentItems.concat(response.data)
+                });
 
             }).catch(err => {
 
@@ -143,7 +141,7 @@ function GenerateInvoicePage() {
                         <th>Quantity</th>
                     </tr>
 
-                    {/* {invoiceItems.map((item) => (
+                    {invoiceItems.map((item) => (
                         <tr key={item.id}>
                             <td>{item.item}</td>
                             <td>${item.rate}</td>
@@ -152,7 +150,7 @@ function GenerateInvoicePage() {
                                 <button onClick={() => { removeInvoiceItem(item.id) }}>Remove</button>
                             </td>
                         </tr>
-                    ))} */}
+                    ))}
                 </tbody>
             </table>
 
