@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useRef } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import LoadedClientsContext from '../../contexts/LoadedClientContext';
 import AddItem from '../invoices/AddItem';
@@ -26,7 +26,8 @@ function GenerateInvoicePage() {
 
 
     //Refs
-    // const quantityInputRef = useRef();
+    const quantityInputRef = useRef();
+    // const quantity = quantityInputRef.current.value
 
 
     //Need to access the loadedClients context and use this id to get the specific client then pass it to finalize INvoice
@@ -147,7 +148,9 @@ function GenerateInvoicePage() {
                         <tr key={item.id}>
                             <td>{item.item}</td>
                             <td>${item.rate}</td>
-                            <td>{item.quantity}</td>
+                            <td>
+                                <input type='text' id='quantity' ref={quantityInputRef}></input>
+                            </td>
                             <td>
                                 <button onClick={() => { removeInvoiceItem(item.id) }}>Remove</button>
                             </td>

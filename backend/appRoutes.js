@@ -119,7 +119,7 @@ routes.post('/items', async (req, res) => {
         rate: req.body.rate
     })
 
-    const newItem = await db.oneOrNone(`SELECT * FROM items WHERE items.item = $(item) AND items.rate = $(rate)`, {
+    const newItem = await db.oneOrNone(`SELECT * FROM items WHERE items.item = $(item) AND items.rate = $(rate) ORDER BY items.id DESC LIMIT 1`, {
         item: req.body.item,
         rate: req.body.rate
     })
