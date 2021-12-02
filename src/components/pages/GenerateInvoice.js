@@ -118,6 +118,8 @@ function GenerateInvoicePage() {
 
     function removeInvoiceItem(itemId) {
 
+        axios.delete(`http://localhost:8080/items/${itemId}`)
+
         setInvoiceItems((currentItems) => {
             return currentItems.filter(item => item.id !== itemId)
         })
