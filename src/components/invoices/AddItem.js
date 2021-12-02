@@ -7,6 +7,7 @@ function AddItem(props) {
 
     const itemNameInputRef = useRef();
     const chargeRateInputRef = useRef();
+    const quantityInputRef = useRef();
 
 
     function submitHandler(event) {
@@ -16,10 +17,12 @@ function AddItem(props) {
 
         let enteredItemName = itemNameInputRef.current.value;
         let enteredChargeRate = chargeRateInputRef.current.value;
+        let enteredQuantity = quantityInputRef.current.value;
 
         const newItem = {
             item: enteredItemName,
-            rate: enteredChargeRate
+            rate: enteredChargeRate,
+            quantity: enteredQuantity
         }
 
         props.updateItems(newItem);
@@ -40,6 +43,10 @@ function AddItem(props) {
                     <div className={classes.control}>
                         <label htmlFor='Charge Rate'>Charge Rate</label>
                         <input type='text' id='chargerate' ref={chargeRateInputRef} />
+                    </div>
+                    <div className={classes.control}>
+                        <label htmlFor='Quantity'>Quantity</label>
+                        <input type='number' id='quantity' ref={quantityInputRef} />
                     </div>
                     <div className={classes.actions}>
                         <button onClick={submitHandler}>Add Item</button>

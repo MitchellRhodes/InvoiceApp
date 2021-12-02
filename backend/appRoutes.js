@@ -278,9 +278,9 @@ routes.delete('/clients/:id', async (req, res) => {
 })
 
 //DELETE ALL ITEMS (CURRENTLY USED FOR DEV PURPOSES BUT MAYBE HAVE IT TO WHERE THEY DELETE ON INVOICE POST)
-routes.delete('/items/', async (req, res) => {
+routes.delete('/items', async (req, res) => {
 
-    const deleteAllItems = await db.none(`DELETE * FROM items`)
+    const deleteAllItems = await db.none(`DELETE FROM items`)
 
     res.status(204).json(deleteAllItems);
 })

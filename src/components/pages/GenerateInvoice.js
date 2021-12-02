@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import LoadedClientsContext from '../../contexts/LoadedClientContext';
 import AddItem from '../invoices/AddItem';
@@ -26,9 +26,7 @@ function GenerateInvoicePage() {
 
 
     //Refs
-    const quantityInputRef = useRef();
-    // const quantity = quantityInputRef.current.value
-
+    // const quantityInputRef = useRef();
 
     //Need to access the loadedClients context and use this id to get the specific client then pass it to finalize INvoice
     const { clientId } = useParams();
@@ -94,7 +92,12 @@ function GenerateInvoicePage() {
 
     async function addNewItem(newItem) {
 
-        await axios.post(`http://localhost:8080/items`, newItem)
+        const postItem = {
+            item: newItem.item,
+            rate: newItem.rate
+        }
+
+        await axios.post(`http://localhost:8080/items`, postItem)
 
             .then(response => {
 
@@ -105,7 +108,14 @@ function GenerateInvoicePage() {
 
                 setInvoiceItems((currentItems) => {
 
-                    return currentItems.concat(response.data)
+                    const addedItem = {
+                        id: response.data.id,
+                        item: response.data.item,
+                        rate: response.data.rate,
+                        quantity: newItem.quantity
+                    }
+
+                    return currentItems.concat(addedItem)
                 });
 
             }).catch(err => {
@@ -132,6 +142,14 @@ function GenerateInvoicePage() {
         return closeFinalizeInvoice();
     }
 
+    // function quantityChange() {
+
+    //     invoiceItems.forEach(item =>
+    //         total += item.rate * item.quantity
+    //     );
+
+    // }
+
     return (
         <section>
             <h3>Create Invoice for {chosenClient.first_name} {chosenClient.last_name}</h3>
@@ -147,10 +165,11 @@ function GenerateInvoicePage() {
                     {invoiceItems.map((item) => (
                         <tr key={item.id}>
                             <td>{item.item}</td>
-                            <td>${item.rate}</td>
-                            <td>
-                                <input type='text' id='quantity' ref={quantityInputRef}></input>
-                            </td>
+                            <td>{item.rate}</td>
+                            <td>{item.quantity}</td>
+                            {/* <td>
+                                <input type='number' id='quantity' ref={quantityInputRef} onChange={quantityChange}></input>
+                            </td> */}
                             <td>
                                 <button onClick={() => { removeInvoiceItem(item.id) }}>Remove</button>
                             </td>
