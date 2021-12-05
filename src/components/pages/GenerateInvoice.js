@@ -1,6 +1,6 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { useState, useEffect, useContext } from 'react';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams, useNavigate } from 'react-router-dom';
 import LoadedClientsContext from '../../contexts/LoadedClientContext';
 import AddItem from '../invoices/AddItem';
 import Backdrop from '../UI/Backdrop';
@@ -31,6 +31,8 @@ function GenerateInvoicePage() {
     //URL Param
     const { clientId } = useParams();
 
+    //variables
+    let navigate = useNavigate()
 
     useEffect(() => {
 
@@ -161,13 +163,10 @@ function GenerateInvoicePage() {
             })
 
 
-        return closeFinalizeInvoice();
+        closeFinalizeInvoice();
     }
 
     async function postInvoiceItems(invoice) {
-
-        //handle posting each item in the array individually
-        //might need axios.all
 
         let postArray = []
 
@@ -198,7 +197,7 @@ function GenerateInvoicePage() {
                 console.log(error)
             })
 
-        // return <Navigate to='/client' />
+        return navigate(`/client`)
 
     }
 
