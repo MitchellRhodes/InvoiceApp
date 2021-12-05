@@ -128,36 +128,37 @@ routes.post('/items', async (req, res) => {
 })
 
 
-//New Invoice for specific client(REDO THIS IS INCORRECT NOW)
-// routes.post('/invoices/:id', async (req, res) => {
+//New Invoice for specific client and a specific date
+routes.post('/invoices/:id', async (req, res) => {
 
-//     const validation = validateInvoice(req.body);
+    const validation = validateInvoice(req.body);
 
-//     if (validation.error) {
-//         return res.status(400).send(validation.error.details[0].message)
-//     }
+    if (validation.error) {
+        return res.status(400).send(validation.error.details[0].message)
+    }
 
-//     await db.none(`INSERT INTO invoices(
-//         client_id,item,rate,quantity)
-//         VALUES(
-//             $(client_id),$(item),$(rate),$(quantity)
-//         )`, {
-//         client_id: +req.params.id,
-//         item: req.body.item,
-//         rate: req.body.rate,
-//         quantity: req.body.quantity
-//     })
+    await db.none(`INSERT INTO invoices(
+        client_id,date_created,total)
+        VALUES(
+            $(client_id),$(date_created),$(total)
+        )`, {
+        client_id: +req.params.id,
+        date_created: req.body.date_created,
+        total: req.body.total
+    })
 
 
-//     const newInvoice = await db.manyOrNone(`SELECT * FROM invoices WHERE client_id = $(id)`, {
-//         id: +req.params.id
-//     })
+    const newInvoice = await db.manyOrNone(`SELECT * FROM invoices WHERE client_id = $(id) AND invoices.date_created = $(date_created)`, {
+        id: +req.params.id,
+        date_created: req.body.date_created
+    })
 
-//     return res.status(201).json(newInvoice)
-// });
+    return res.status(201).json(newInvoice)
+});
 
 //PUT ROUTES=========================================================
 
+//update user info
 routes.put('/users/:id', async (req, res) => {
 
     const user = await db.oneOrNone(`SELECT * FROM users WHERE users.id = $(id)`, {
@@ -198,6 +199,7 @@ routes.put('/users/:id', async (req, res) => {
 
 });
 
+//update client info
 routes.put('/clients/:id', async (req, res) => {
 
     const client = await db.oneOrNone(`SELECT * FROM clients WHERE clients.id=$(id)`, {
@@ -242,6 +244,7 @@ routes.put('/clients/:id', async (req, res) => {
 
 //DELETE ROUTES=======================================================
 
+//DELETE user
 routes.delete('/users/:id', async (req, res) => {
 
     const user = await db.oneOrNone(`SELECT * FROM users WHERE users.id = $(id)`, {
@@ -259,6 +262,7 @@ routes.delete('/users/:id', async (req, res) => {
     res.status(204).json(deleteUser);
 });
 
+//DELETE CLIENT
 routes.delete('/clients/:id', async (req, res) => {
 
     const client = await db.oneOrNone(`SELECT * FROM clients WHERE clients.id = $(id)`, {
@@ -355,6 +359,17 @@ function validateItem(item) {
     return schema.validate(item);
 }
 
+
+function validateInvoice(invoice) {
+
+    const schema = Joi.object({
+        client_id: Joi.number().integer().required(),
+        date_created: Joi.date().required(),
+        total: Joi.number().precision(2).required()
+    });
+
+    return schema.validate(invoice);
+}
 
 
 module.exports = routes;
