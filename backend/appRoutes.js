@@ -27,6 +27,21 @@ routes.get('/invoices', async (req, res) => {
     res.status(200).json(invoices);
 })
 
+//get ALL items(FOR DEV PURPOSES)
+routes.get('/items', async (req, res) => {
+    const items = await db.manyOrNone(`SELECT * FROM items`);
+
+    res.status(200).json(items);
+})
+
+
+//GET ALL invoice items (FOR DEV PURPOSES)
+routes.get('/invoice-items', async (req, res) => {
+    const invoiceItems = await db.manyOrNone(`SELECT * FROM invoice_items`);
+
+    res.status(200).json(invoiceItems);
+})
+
 //get specific user with email
 routes.get('/users/:email', async (req, res) => {
     const user = await db.oneOrNone(`SELECT * FROM users WHERE users.email= $(email)`, {
@@ -154,6 +169,33 @@ routes.post('/invoices/:id', async (req, res) => {
     })
 
     return res.status(201).json(newInvoice)
+});
+
+//POST INVOICE ITEMS
+routes.post('/invoice-items/:id', async (req, res) => {
+
+    const validation = validateInvoiceItems(req.body);
+
+    if (validation.error) {
+        return res.status(400).send(validation.error.details[0].message)
+    }
+
+    await db.none(`INSERT INTO invoice_items(
+        invoice_id,item_id,quantity)
+        VALUES(
+            $(invoice_id),$(item_id),$(quantity)
+        )`, {
+        invoice_id: +req.params.id,
+        item_id: req.body.item_id,
+        quantity: req.body.quantity
+    })
+
+
+    const newInvoiceItem = await db.manyOrNone(`SELECT * FROM invoice_items WHERE invoice_items.invoice_id = $(id)`, {
+        id: +req.params.id
+    })
+
+    return res.status(201).json(newInvoiceItem)
 });
 
 //PUT ROUTES=========================================================
@@ -376,6 +418,16 @@ function validateInvoice(invoice) {
     });
 
     return schema.validate(invoice);
+}
+
+function validateInvoiceItems(invoiceItems) {
+
+    const schema = Joi.object({
+        item_id: Joi.number().integer().required(),
+        quantity: Joi.number().integer().required()
+    });
+
+    return schema.validate(invoiceItems);
 }
 
 

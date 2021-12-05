@@ -26,6 +26,7 @@ function GenerateInvoicePage() {
     const [finalizeInvoice, setFinalizeInvoice] = useState(false);
     const [chosenClient, setChosenClient] = useState({});
     const [error, setError] = useState(null);
+    // const [addedInvoice, setAddedInvoice] = useState({});
 
     //URL Param
     const { clientId } = useParams();
@@ -151,7 +152,7 @@ function GenerateInvoicePage() {
                     throw Error(response.statusText)
                 }
 
-                console.log(response.data)
+                postInvoiceItems(response.data);
 
             }).catch(err => {
 
@@ -160,13 +161,28 @@ function GenerateInvoicePage() {
             })
 
 
-        postInvoiceItems();
         return closeFinalizeInvoice();
     }
 
-    async function postInvoiceItems() {
+    async function postInvoiceItems(invoice) {
 
         //handle posting each item in the array individually
+        //might need axios.all
+
+        // invoiceItems.forEach(item => console.log(item))
+
+        await axios.all(invoiceItems)
+
+            .then(axios.spread((...responses) => {
+
+                responses.forEach(res => console.log(res))
+            }))
+            .catch(err => {
+
+                setError(err.message);
+                console.log(error)
+            })
+
         // return <Navigate to='/client' />
 
     }
