@@ -140,12 +140,11 @@ function GenerateInvoicePage() {
         //this gets posted and THEN the items get posted after 
         //Have the props of final invoice emit up to here to post 
         const newInvoice = {
-            client_id: chosenClient,
             date_created: '12-01-21',
             total: 0.00
         }
 
-        await axios.post(`http://localhost:8080/invoices/${chosenClient}`, newInvoice)
+        await axios.post(`http://localhost:8080/invoices/${chosenClient.id}`, newInvoice)
 
             .then(response => {
 

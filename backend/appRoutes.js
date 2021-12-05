@@ -148,7 +148,7 @@ routes.post('/invoices/:id', async (req, res) => {
     })
 
 
-    const newInvoice = await db.manyOrNone(`SELECT * FROM invoices WHERE client_id = $(id) AND invoices.date_created = $(date_created)`, {
+    const newInvoice = await db.oneOrNone(`SELECT * FROM invoices WHERE invoices.client_id = $(id) AND invoices.date_created = $(date_created)`, {
         id: +req.params.id,
         date_created: req.body.date_created
     })
@@ -371,7 +371,6 @@ function validateItem(item) {
 function validateInvoice(invoice) {
 
     const schema = Joi.object({
-        client_id: Joi.number().integer().required(),
         date_created: Joi.date().required(),
         total: Joi.number().precision(2).required()
     });
