@@ -169,9 +169,24 @@ function GenerateInvoicePage() {
         //handle posting each item in the array individually
         //might need axios.all
 
-        // invoiceItems.forEach(item => console.log(item))
+        let postArray = []
 
-        await axios.all(invoiceItems)
+        invoiceItems.forEach(item => {
+            let postData = {
+                item_id: item.id,
+                quantity: item.quantity
+            }
+
+            let newPromise = axios({
+                method: 'post',
+                url: `http://localhost:8080/invoice-items/${invoice.id}`,
+                data: postData
+            })
+
+            postArray.push(newPromise);
+        })
+
+        await axios.all(postArray)
 
             .then(axios.spread((...responses) => {
 
