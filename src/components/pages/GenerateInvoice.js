@@ -9,6 +9,7 @@ import axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import moment from "moment";
 
 
 function GenerateInvoicePage() {
@@ -136,12 +137,9 @@ function GenerateInvoicePage() {
 
     async function postInvoice() {
 
-        //placeholder data till I figure out how to get date and get total from total function probably have this go through on finalize
-        //this gets posted and THEN the items get posted after 
-        //Have the props of final invoice emit up to here to post 
         const newInvoice = {
-            date_created: '12-01-21',
-            total: 0.00
+            date_created: moment().format("DD-MM-YYYY hh:mm:ss"),
+            total: cost
         }
 
         await axios.post(`http://localhost:8080/invoices/${chosenClient.id}`, newInvoice)
@@ -169,6 +167,8 @@ function GenerateInvoicePage() {
     async function postInvoiceItems() {
 
         //handle posting each item in the array individually
+        // return <Navigate to='/client' />
+
     }
 
     return (
