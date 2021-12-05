@@ -4,7 +4,7 @@ import { Navigate, useParams } from 'react-router-dom';
 import LoadedClientsContext from '../../contexts/LoadedClientContext';
 import AddItem from '../invoices/AddItem';
 import Backdrop from '../UI/Backdrop';
-import FinalInvoicePage from './FinalInvoice';
+import FinalInvoicePage from '../invoices/FinalInvoice';
 import axios from "axios";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,7 +13,7 @@ import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 
 function GenerateInvoicePage() {
 
-    //context
+    //contexts
     const { isAuthenticated } = useAuth0();
     const clientContext = useContext(LoadedClientsContext);
 
@@ -26,12 +26,11 @@ function GenerateInvoicePage() {
     const [chosenClient, setChosenClient] = useState({});
     const [error, setError] = useState(null);
 
-    //Need to access the loadedClients context and use this id to get the specific client then pass it to finalize INvoice
+    //URL Param
     const { clientId } = useParams();
 
 
     useEffect(() => {
-
 
         function getTotal() {
             let total = 0;
@@ -58,7 +57,7 @@ function GenerateInvoicePage() {
         getClient();
         getTotal();
 
-    }, [cost, invoiceItems, clientId, clientContext.loadedClients])
+    }, [cost, invoiceItems, clientId, clientContext.loadedClients, error])
 
 
     if (!isAuthenticated) {
@@ -136,10 +135,42 @@ function GenerateInvoicePage() {
 
 
     async function postInvoice() {
-        //come back to after fixing database with invoice items
+
+        //placeholder data till I figure out how to get date and get total from total function probably have this go through on finalize
+        //this gets posted and THEN the items get posted after 
+        //Have the props of final invoice emit up to here to post 
+        const newInvoice = {
+            client_id: chosenClient,
+            date_created: '12-01-21',
+            total: 0.00
+        }
+
+        await axios.post(`http://localhost:8080/invoices/${chosenClient}`, newInvoice)
+
+            .then(response => {
+
+                if (response.statusText !== 'Created') {
+
+                    throw Error(response.statusText)
+                }
+
+                console.log(response.data)
+
+            }).catch(err => {
+
+                setError(err.message);
+                console.log(error)
+            })
+
+
+        postInvoiceItems();
         return closeFinalizeInvoice();
     }
 
+    async function postInvoiceItems() {
+
+        //handle posting each item in the array individually
+    }
 
     return (
         <section>

@@ -289,6 +289,14 @@ routes.delete('/items', async (req, res) => {
     res.status(204).json(deleteAllItems);
 })
 
+//DELETE ALL INVOICES (CURRENTLY DEV ONLY)
+routes.delete('/invoices', async (req, res) => {
+
+    const deleteAllInvoices = await db.none(`DELETE FROM invoices`)
+
+    res.status(204).json(deleteAllInvoices);
+})
+
 //DELETE A SPECIFIC ITEM
 routes.delete('/items/:id', async (req, res) => {
 
