@@ -9,6 +9,7 @@ import GenerateInvoicePage from './components/pages/GenerateInvoice';
 import LoginPage from './components/pages/LoginPage';
 import UserProfilePage from './components/pages/UserProfile';
 import { LoadedClientsContextProvider } from './contexts/LoadedClientContext';
+import AllClientInvoicesPage from './components/pages/AllClientInvoices';
 
 
 
@@ -29,6 +30,7 @@ function App() {
             <Route path='/user-profile' element={<UserProfilePage />} />
             <Route path='/client' element={<ClientInfoPage />} />
             <Route path='/generate-invoice/:clientId' element={<GenerateInvoicePage />} />
+            <Route path='/client-invoices/:clientId' element={<AllClientInvoicesPage />} />
 
           </Routes>
         </LoadedClientsContextProvider>

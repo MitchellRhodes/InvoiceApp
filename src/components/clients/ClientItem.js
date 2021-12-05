@@ -80,7 +80,10 @@ function ClientItem(props) {
                 </div>
 
                 <div className={classes.actions}>
-                    <button>View {props.first_name}'s Invoices</button>
+
+                    <Link to={`/client-invoices/${props.id}`}>
+                        <button>View {props.first_name}'s Invoices</button>
+                    </Link>
 
                     <Link to={`/generate-invoice/${props.id}`}>
                         <button>Create Invoice</button>

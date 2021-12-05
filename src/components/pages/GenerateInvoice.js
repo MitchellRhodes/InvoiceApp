@@ -26,7 +26,6 @@ function GenerateInvoicePage() {
     const [finalizeInvoice, setFinalizeInvoice] = useState(false);
     const [chosenClient, setChosenClient] = useState({});
     const [error, setError] = useState(null);
-    // const [addedInvoice, setAddedInvoice] = useState({});
 
     //URL Param
     const { clientId } = useParams();
@@ -189,7 +188,7 @@ function GenerateInvoicePage() {
 
             .then(axios.spread((...responses) => {
 
-                responses.forEach(res => console.log(res))
+                responses.forEach(res => console.log('Success'))
             }))
             .catch(err => {
 
