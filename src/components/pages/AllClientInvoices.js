@@ -1,8 +1,10 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import LoadedClientsContext from '../../contexts/LoadedClientContext';
+import axios from "axios";
 
 import { useContext, useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
+import InvoiceList from '../invoices/InvoiceList';
 
 
 function AllClientInvoicesPage() {
@@ -13,6 +15,9 @@ function AllClientInvoicesPage() {
 
     //states
     const [chosenClient, setChosenClient] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [loadedInvoices, setLoadedInvoices] = useState([]);
 
 
     //URL Param
@@ -21,27 +26,69 @@ function AllClientInvoicesPage() {
 
     useEffect(() => {
 
-        function getClient() {
+        if (!isAuthenticated) {
 
-            let chosen = clientContext.loadedClients.find(client => client.id === +clientId);
+            return <Navigate to='/' />
 
-            return setChosenClient(chosen);
+        } else {
+
+            function getClient() {
+
+                let chosen = clientContext.loadedClients.find(client => client.id === +clientId);
+
+                return setChosenClient(chosen);
+            }
+
+            getClient();
+
+            async function getInvoices() {
+
+                setIsLoading(true);
+
+                await axios.get(
+                    `http://localhost:8080/invoices/${+clientId}`
+                ).then(response => {
+
+                    if (response.statusText !== 'OK') {
+
+                        throw Error(response.statusText)
+                    }
+
+                    setIsLoading(false);
+                    setError(null);
+                    setLoadedInvoices(response.data)
+
+                }).catch(err => {
+
+                    setIsLoading(false);
+                    setError(err.message);
+
+                });
+
+
+            }
+            getInvoices();
+
         }
 
-        getClient();
-
-    }, [clientId, clientContext.loadedClients])
 
 
+    }, [clientId, clientContext.loadedClients, chosenClient.id, isAuthenticated])
 
-    if (!isAuthenticated) {
 
-        return <Navigate to='/' />
 
-    }
 
     return (
-        <h1>All {chosenClient.first_name}'s' invoices</h1>
+        <section>
+            {!isAuthenticated && <Navigate to='/' />}
+            {error && <div>{error}</div>}
+            {isLoading && <div>Loading...</div>}
+
+            <h1>All of {chosenClient.first_name}'s' invoices</h1>
+
+            <InvoiceList clientInvoices={loadedInvoices} />
+
+        </section>
     )
 }
 

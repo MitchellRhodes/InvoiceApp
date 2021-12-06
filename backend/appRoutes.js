@@ -68,6 +68,38 @@ routes.get('/clients/:id', async (req, res) => {
     res.status(200).json(clients);
 });
 
+//GET specific clients invoice information
+routes.get('/invoices/:id', async (req, res) => {
+
+    const invoices = await db.manyOrNone(`SELECT id, client_id, total, date_created FROM invoices
+    WHERE client_id = $(id)`, {
+        id: +req.params.id
+    });
+
+    if (!invoices) {
+        return res.status(404).send('No invoices were found for this Client.')
+    }
+
+    return res.status(200).json(invoices);
+})
+
+
+//GET specific clients invoice items
+routes.get('/invoice-items/:id', async (req, res) => {
+
+    const invoiceItems = await db.manyOrNone(`SELECT ii.item_id, ii.quantity, it.item, it.rate FROM invoice_items ii
+    INNER JOIN items it on ii.item_id = it.id
+    WHERE invoice_id = $(id)`, {
+        id: +req.params.id
+    });
+
+    if (!invoiceItems) {
+        return res.status(404).send('No items were found for this invoice.')
+    }
+
+    return res.status(200).json(invoiceItems);
+})
+
 //POST ROUTES============================================================
 
 //New User
