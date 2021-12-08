@@ -71,7 +71,7 @@ routes.get('/clients/:id', async (req, res) => {
 //GET specific clients invoice information
 routes.get('/invoices/:id', async (req, res) => {
 
-    const invoices = await db.manyOrNone(`SELECT id, client_id, total, date_created FROM invoices
+    const invoices = await db.manyOrNone(`SELECT id, client_id, total, to_char(date_created, 'DD/MM/YYYY HH24:MI:SS') as date_created FROM invoices
     WHERE client_id = $(id)`, {
         id: +req.params.id
     });
@@ -369,6 +369,24 @@ routes.delete('/invoices', async (req, res) => {
     const deleteAllInvoices = await db.none(`DELETE FROM invoices`)
 
     res.status(204).json(deleteAllInvoices);
+})
+
+//DELETE SPECIFIC INVOICE
+routes.delete('/invoices/:id', async (req, res) => {
+
+    const invoice = await db.oneOrNone(`SELECT * FROM invoices WHERE invoices.id = $(id)`, {
+        id: +req.params.id
+    })
+
+    if (!invoice) {
+        return res.status(404).send('Invoice ID not found')
+    }
+
+    const deleteInvoice = await db.none(`DELETE FROM invoices WHERE invoices.id=$(id)`, {
+        id: +req.params.id
+    })
+
+    res.status(204).json(deleteInvoice);
 })
 
 //DELETE A SPECIFIC ITEM

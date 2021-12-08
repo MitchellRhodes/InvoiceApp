@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Card from "../UI/Card";
 
 
+
 function InvoiceItem(props) {
 
     //states
@@ -47,7 +48,7 @@ function InvoiceItem(props) {
             <Card>
                 {error && <div>{error}</div>}
                 {isLoading && <div>Loading...</div>}
-                {props.date_created}
+                <h3>Date Posted: {props.date_created}</h3>
 
                 <table>
                     <tbody>
@@ -66,6 +67,10 @@ function InvoiceItem(props) {
                         ))}
                     </tbody>
                 </table>
+
+                <div>
+                    <h4>Amount Due: {props.total}</h4>
+                </div>
 
             </Card>
         </ul>
