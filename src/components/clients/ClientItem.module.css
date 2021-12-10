@@ -2,6 +2,10 @@
     font-size: 2rem;
 }
 
+.greenIcon{
+    color: green;
+}
+
 .content{
     padding-left: 1.25rem;
 }
