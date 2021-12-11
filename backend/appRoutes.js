@@ -68,10 +68,10 @@ routes.get('/clients/:id', async (req, res) => {
     res.status(200).json(clients);
 });
 
-//GET specific clients invoice information
+//GET specific clients UNPAID invoice information 
 routes.get('/invoices/:id', async (req, res) => {
 
-    const invoices = await db.manyOrNone(`SELECT id, client_id, total, to_char(date_created, 'DD/MM/YYYY HH24:MI:SS') as date_created FROM invoices
+    const invoices = await db.manyOrNone(`SELECT id, client_id, total, to_char(date_created, 'DD/MM/YYYY HH24:MI:SS') as date_created, completed FROM invoices
     WHERE client_id = $(id)`, {
         id: +req.params.id
     });
@@ -185,13 +185,14 @@ routes.post('/invoices/:id', async (req, res) => {
     }
 
     await db.none(`INSERT INTO invoices(
-        client_id,date_created,total)
+        client_id,date_created,total,completed)
         VALUES(
-            $(client_id),$(date_created),$(total)
+            $(client_id),$(date_created),$(total),$(completed)
         )`, {
         client_id: +req.params.id,
         date_created: req.body.date_created,
-        total: req.body.total
+        total: req.body.total,
+        completed: false
     })
 
 

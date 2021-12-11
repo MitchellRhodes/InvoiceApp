@@ -5,7 +5,6 @@ import axios from "axios";
 import { useContext, useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import InvoiceList from '../invoices/InvoiceList';
-import CompletedInvoicesPage from '../invoices/CompletedInvoices';
 import LoadedInvoicesContext from '../../contexts/loadedInvoicesContext';
 
 
@@ -45,7 +44,7 @@ function AllClientInvoicesPage() {
 
             getClient();
 
-            async function getUnpaidInvoices() {
+            async function getInvoices() {
 
                 setIsLoading(true);
 
@@ -74,7 +73,7 @@ function AllClientInvoicesPage() {
 
 
             }
-            getUnpaidInvoices();
+            getInvoices();
 
         }
 
@@ -89,7 +88,7 @@ function AllClientInvoicesPage() {
     }
 
 
-    function showOutstandingInvoices() {
+    function showUnpaidInvoices() {
 
         return setShowCompleted(false);
     }
@@ -103,19 +102,17 @@ function AllClientInvoicesPage() {
 
             <h1>All of {chosenClient.first_name}'s' invoices</h1>
 
-            {!showCompleted &&
-                <div>
-                    <button onClick={showCompletedInvoices}>Show Completed Invoices</button>
 
-                    <InvoiceList clientInvoices={loadedInvoices} />
-                </div>}
+            {!showCompleted &&
+                <button onClick={showCompletedInvoices}>Show Completed Invoices</button>
+            }
 
             {showCompleted &&
-                <div>
-                    <button onClick={showOutstandingInvoices}>Show Unpaid Invoices</button>
+                <button onClick={showUnpaidInvoices}>Show Unpaid Invoices</button>
+            }
 
-                    <CompletedInvoicesPage />
-                </div>}
+            <InvoiceList clientInvoices={loadedInvoices} showCompleted={showCompleted} />
+
 
 
         </section>

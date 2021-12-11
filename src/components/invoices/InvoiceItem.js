@@ -24,6 +24,7 @@ function InvoiceItem(props) {
     const [error, setError] = useState(null);
     const [loadedItems, setLoadedItems] = useState([]);
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    // const [invoiceComplete, setInvoiceComplete] = useState(false);
 
 
     useEffect(() => {
@@ -67,6 +68,11 @@ function InvoiceItem(props) {
         setModalIsOpen(false);
     }
 
+    function completeInvoice() {
+        //put route to update. May have to be in useEffect
+        console.log('complete Invoice')
+    }
+
     function removeInvoice(id) {
 
         axios.delete(`http://localhost:8080/invoices/${id}`)
@@ -77,41 +83,80 @@ function InvoiceItem(props) {
 
     return (
         <ul>
-            <Card>
-                {error && <div>{error}</div>}
-                {isLoading && <div>Loading...</div>}
-                <h3>Date Posted: {props.date_created}</h3>
+            {props.showCompleted === false && props.completed === false &&
+                <Card>
+                    {error && <div>{error}</div>}
+                    {isLoading && <div>Loading...</div>}
+                    <h3>Date Posted: {props.date_created}</h3>
 
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>Item</th>
-                            <th>Rate</th>
-                            <th>Quantity</th>
-                        </tr>
-
-                        {loadedItems.map((item) => (
-                            <tr key={item.item_id}>
-                                <td>{item.item}</td>
-                                <td>{item.rate}</td>
-                                <td>{item.quantity}</td>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th>Item</th>
+                                <th>Rate</th>
+                                <th>Quantity</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
 
-                <div>
-                    <h4>Amount Due: {props.total}</h4>
-                </div>
+                            {loadedItems.map((item) => (
+                                <tr key={item.item_id}>
+                                    <td>{item.item}</td>
+                                    <td>{item.rate}</td>
+                                    <td>{item.quantity}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
 
-                <FontAwesomeIcon icon={faCheck} className={`${classes.icon} ${classes.greenIcon}`}></FontAwesomeIcon>
+                    <div>
+                        <h4>Amount Due: {props.total}</h4>
+                    </div>
 
-                <FontAwesomeIcon icon={faTrashAlt} onClick={openDeleteCard} className={classes.icon}></FontAwesomeIcon>
-                {modalIsOpen ? <DeleteModal onCancel={closeDeleteCard} onRemove={() => removeInvoice(props.id)} /> : null}
-                {modalIsOpen ? <Backdrop onClick={closeDeleteCard} /> : null}
+                    <FontAwesomeIcon icon={faCheck} onClick={completeInvoice} className={`${classes.icon} ${classes.greenIcon}`}></FontAwesomeIcon>
 
-            </Card>
+                    <FontAwesomeIcon icon={faTrashAlt} onClick={openDeleteCard} className={classes.icon}></FontAwesomeIcon>
+                    {modalIsOpen ? <DeleteModal onCancel={closeDeleteCard} onRemove={() => removeInvoice(props.id)} /> : null}
+                    {modalIsOpen ? <Backdrop onClick={closeDeleteCard} /> : null}
+
+                </Card>
+            }
+
+            {props.showCompleted === true && props.completed === true &&
+                <Card>
+                    {error && <div>{error}</div>}
+                    {isLoading && <div>Loading...</div>}
+                    <h2>PAID IN FULL</h2>
+                    <h3>Date Posted: {props.date_created}</h3>
+
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th>Item</th>
+                                <th>Rate</th>
+                                <th>Quantity</th>
+                            </tr>
+
+                            {loadedItems.map((item) => (
+                                <tr key={item.item_id}>
+                                    <td>{item.item}</td>
+                                    <td>{item.rate}</td>
+                                    <td>{item.quantity}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+
+                    <div>
+                        <h4>Total: {props.total}</h4>
+                    </div>
+
+                    <FontAwesomeIcon icon={faTrashAlt} onClick={openDeleteCard} className={classes.icon}></FontAwesomeIcon>
+                    {modalIsOpen ? <DeleteModal onCancel={closeDeleteCard} onRemove={() => removeInvoice(props.id)} /> : null}
+                    {modalIsOpen ? <Backdrop onClick={closeDeleteCard} /> : null}
+
+                </Card>
+            }
         </ul>
+
     )
 }
 

@@ -6,7 +6,9 @@ function InvoiceList(props) {
 
     return (
 
+
         <ul className={classes.list}>
+
 
             {props.clientInvoices.map(invoices => (
 
@@ -15,7 +17,9 @@ function InvoiceList(props) {
                     id={invoices.id}
                     client_id={invoices.client_id}
                     date_created={invoices.date_created}
-                    total={invoices.total} />
+                    total={invoices.total}
+                    completed={invoices.completed}
+                    showCompleted={props.showCompleted} />
             ))}
 
         </ul>
