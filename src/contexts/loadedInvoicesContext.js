@@ -3,7 +3,8 @@ import { createContext, useState } from "react";
 
 const LoadedInvoicesContext = createContext({
     loadedInvoices: [],
-    removeInvoice: (invoiceId) => { }
+    removeInvoice: (invoiceId) => { },
+    invoiceIsComplete: (completedInvoice) => { }
 })
 
 export function LoadedInvoicesContextProvider(props) {
@@ -17,9 +18,18 @@ export function LoadedInvoicesContextProvider(props) {
         })
     };
 
+    function invoiceIsCompleteHandler(completedInvoice) {
+
+        setInvoices((previousInvoices) => {
+
+            return previousInvoices.concat(completedInvoice)
+        })
+    }
+
     const context = {
         loadedInvoices: invoices,
-        removeInvoice: removeInvoiceHandler
+        removeInvoice: removeInvoiceHandler,
+        invoiceIsComplete: invoiceIsCompleteHandler
     }
 
     return (

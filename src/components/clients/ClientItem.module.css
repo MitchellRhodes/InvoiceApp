@@ -6,6 +6,10 @@
     color: green;
 }
 
+.redIcon{
+    color: red;
+}
+
 .content{
     padding-left: 1.25rem;
 }

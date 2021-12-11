@@ -8,6 +8,8 @@ import LoadedInvoicesContext from "../../contexts/loadedInvoicesContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
 import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+
 
 
 //placeholder, will probably need a more specific one for this component
@@ -68,9 +70,46 @@ function InvoiceItem(props) {
         setModalIsOpen(false);
     }
 
-    function completeInvoice() {
-        //put route to update. May have to be in useEffect
-        console.log('complete Invoice')
+    async function completeInvoice(invoiceId) {
+
+        await axios.put(`http://localhost:8080/invoices/${invoiceId}`, { completed: true })
+
+            .then(response => {
+
+                if (response.statusText !== 'OK') {
+
+                    throw Error(response.statusText)
+                }
+
+                invoiceContext.removeInvoice(invoiceId)
+                invoiceContext.invoiceIsComplete(response.data)
+
+            }).catch(err => {
+
+                setError(err.message);
+                console.log(error)
+            })
+    }
+
+    async function undoCompleteInvoice(invoiceId) {
+
+        await axios.put(`http://localhost:8080/invoices/${invoiceId}`, { completed: false })
+
+            .then(response => {
+
+                if (response.statusText !== 'OK') {
+
+                    throw Error(response.statusText)
+                }
+
+                invoiceContext.removeInvoice(invoiceId)
+                invoiceContext.invoiceIsComplete(response.data)
+
+            }).catch(err => {
+
+                setError(err.message);
+                console.log(error)
+            })
     }
 
     function removeInvoice(id) {
@@ -111,7 +150,7 @@ function InvoiceItem(props) {
                         <h4>Amount Due: {props.total}</h4>
                     </div>
 
-                    <FontAwesomeIcon icon={faCheck} onClick={completeInvoice} className={`${classes.icon} ${classes.greenIcon}`}></FontAwesomeIcon>
+                    <FontAwesomeIcon icon={faCheck} onClick={() => completeInvoice(props.id)} className={`${classes.icon} ${classes.greenIcon}`}></FontAwesomeIcon>
 
                     <FontAwesomeIcon icon={faTrashAlt} onClick={openDeleteCard} className={classes.icon}></FontAwesomeIcon>
                     {modalIsOpen ? <DeleteModal onCancel={closeDeleteCard} onRemove={() => removeInvoice(props.id)} /> : null}
@@ -148,6 +187,8 @@ function InvoiceItem(props) {
                     <div>
                         <h4>Total: {props.total}</h4>
                     </div>
+
+                    <FontAwesomeIcon icon={faTimes} onClick={() => undoCompleteInvoice(props.id)} className={`${classes.icon} ${classes.redIcon}`}></FontAwesomeIcon>
 
                     <FontAwesomeIcon icon={faTrashAlt} onClick={openDeleteCard} className={classes.icon}></FontAwesomeIcon>
                     {modalIsOpen ? <DeleteModal onCancel={closeDeleteCard} onRemove={() => removeInvoice(props.id)} /> : null}

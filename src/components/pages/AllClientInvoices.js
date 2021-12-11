@@ -100,15 +100,20 @@ function AllClientInvoicesPage() {
             {error && <div>{error}</div>}
             {isLoading && <div>Loading...</div>}
 
-            <h1>All of {chosenClient.first_name}'s' invoices</h1>
 
 
             {!showCompleted &&
-                <button onClick={showCompletedInvoices}>Show Completed Invoices</button>
+                <div>
+                    <h1>{chosenClient.first_name}'s Unpaid invoices</h1>
+                    <button onClick={showCompletedInvoices}>Show Completed Invoices</button>
+                </div>
             }
 
             {showCompleted &&
-                <button onClick={showUnpaidInvoices}>Show Unpaid Invoices</button>
+                <div>
+                    <h1>{chosenClient.first_name}'s Paid invoices</h1>
+                    <button onClick={showUnpaidInvoices}>Show Unpaid Invoices</button>
+                </div>
             }
 
             <InvoiceList clientInvoices={loadedInvoices} showCompleted={showCompleted} />

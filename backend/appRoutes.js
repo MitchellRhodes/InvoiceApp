@@ -315,6 +315,39 @@ routes.put('/clients/:id', async (req, res) => {
 
 })
 
+//Update Invoice completion
+routes.put('/invoices/:id', async (req, res) => {
+
+    const invoice = await db.oneOrNone(`SELECT * FROM invoices WHERE invoices.id=$(id)`, {
+        id: +req.params.id
+    })
+
+    if (!invoice) {
+        res.status(404).send('Invoice was not found')
+    }
+
+    // const validation = validateUserUpdate(req.body);
+
+    // if (validation.error) {
+    //     return res.status(400).send(validation.error.details[0].message);
+    // }
+
+    await db.oneOrNone(`UPDATE invoices
+    SET
+    completed = $(completed)
+    WHERE invoices.id = $(id)`, {
+        id: +req.params.id,
+        completed: req.body.completed
+    })
+
+    const updatedInvoice = await db.oneOrNone(`SELECT * FROM invoices WHERE invoices.id = $(id)`, {
+        id: +req.params.id
+    })
+
+    res.status(200).json(updatedInvoice);
+
+})
+
 
 
 //DELETE ROUTES=======================================================
