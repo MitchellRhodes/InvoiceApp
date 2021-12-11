@@ -1,8 +1,9 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Backdrop from "../UI/Backdrop";
 import Card from "../UI/Card";
 import DeleteModal from "../UI/DeleteModal";
+import LoadedInvoicesContext from "../../contexts/loadedInvoicesContext";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/free-solid-svg-icons";
@@ -14,6 +15,9 @@ import classes from "../clients/ClientItem.module.css";
 
 
 function InvoiceItem(props) {
+
+    //contexts
+    const invoiceContext = useContext(LoadedInvoicesContext);
 
     //states
     const [isLoading, setIsLoading] = useState(true);
@@ -65,8 +69,8 @@ function InvoiceItem(props) {
 
     function removeInvoice(id) {
 
-        //UPDATE CONTEXT like with the clientItem
         axios.delete(`http://localhost:8080/invoices/${id}`)
+        invoiceContext.removeInvoice(id);
         return closeDeleteCard();
     }
 

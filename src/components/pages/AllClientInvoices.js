@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
 import InvoiceList from '../invoices/InvoiceList';
 import CompletedInvoicesPage from '../invoices/CompletedInvoices';
+import LoadedInvoicesContext from '../../contexts/loadedInvoicesContext';
 
 
 function AllClientInvoicesPage() {
@@ -13,6 +14,7 @@ function AllClientInvoicesPage() {
     //Contexts
     const { isAuthenticated } = useAuth0();
     const clientContext = useContext(LoadedClientsContext);
+    const invoiceContext = useContext(LoadedInvoicesContext);
 
     //states
     const [chosenClient, setChosenClient] = useState({});
@@ -43,7 +45,7 @@ function AllClientInvoicesPage() {
 
             getClient();
 
-            async function getInvoices() {
+            async function getUnpaidInvoices() {
 
                 setIsLoading(true);
 
@@ -56,9 +58,12 @@ function AllClientInvoicesPage() {
                         throw Error(response.statusText)
                     }
 
+                    const invoices = response.data;
+
                     setIsLoading(false);
                     setError(null);
-                    setLoadedInvoices(response.data)
+                    invoiceContext.loadedInvoices = invoices;
+                    setLoadedInvoices(invoices)
 
                 }).catch(err => {
 
@@ -69,13 +74,13 @@ function AllClientInvoicesPage() {
 
 
             }
-            getInvoices();
+            getUnpaidInvoices();
 
         }
 
 
 
-    }, [clientId, clientContext.loadedClients, chosenClient.id, isAuthenticated])
+    }, [clientId, clientContext.loadedClients, chosenClient.id, isAuthenticated, invoiceContext])
 
 
     function showCompletedInvoices() {

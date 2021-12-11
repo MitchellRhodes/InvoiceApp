@@ -9,6 +9,7 @@ import GenerateInvoicePage from './components/pages/GenerateInvoice';
 import LoginPage from './components/pages/LoginPage';
 import UserProfilePage from './components/pages/UserProfile';
 import { LoadedClientsContextProvider } from './contexts/LoadedClientContext';
+import { LoadedInvoicesContextProvider } from './contexts/loadedInvoicesContext';
 import AllClientInvoicesPage from './components/pages/AllClientInvoices';
 
 
@@ -24,15 +25,17 @@ function App() {
 
       <UserContext.Provider value={userValue}>
         <LoadedClientsContextProvider>
-          <Routes>
+          <LoadedInvoicesContextProvider>
+            <Routes>
 
-            <Route path='/' element={<LoginPage />} />
-            <Route path='/user-profile' element={<UserProfilePage />} />
-            <Route path='/client' element={<ClientInfoPage />} />
-            <Route path='/generate-invoice/:clientId' element={<GenerateInvoicePage />} />
-            <Route path='/client-invoices/:clientId' element={<AllClientInvoicesPage />} />
+              <Route path='/' element={<LoginPage />} />
+              <Route path='/user-profile' element={<UserProfilePage />} />
+              <Route path='/client' element={<ClientInfoPage />} />
+              <Route path='/generate-invoice/:clientId' element={<GenerateInvoicePage />} />
+              <Route path='/client-invoices/:clientId' element={<AllClientInvoicesPage />} />
 
-          </Routes>
+            </Routes>
+          </LoadedInvoicesContextProvider>
         </LoadedClientsContextProvider>
       </UserContext.Provider>
     </Layout>
