@@ -14,9 +14,14 @@
     .control {
       margin-bottom: 0.5rem;
     }
-    
-    .control label {
-      display: block;
+
+    .required{
+      color:red;
+      font-weight: bold;
+    }
+
+    .control label{
+      display: inline-block;
       font-weight: bold;
       margin-bottom: 0.5rem;
     }

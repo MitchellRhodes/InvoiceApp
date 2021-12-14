@@ -23,10 +23,10 @@ function InvoiceItem(props) {
 
     //states
     const [isLoading, setIsLoading] = useState(true);
+
     const [error, setError] = useState(null);
     const [loadedItems, setLoadedItems] = useState([]);
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    // const [invoiceComplete, setInvoiceComplete] = useState(false);
 
 
     useEffect(() => {

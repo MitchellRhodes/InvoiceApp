@@ -37,15 +37,15 @@ function AddItem(props) {
             <Card>
                 <form className={classes.form}>
                     <div className={classes.control}>
-                        <label htmlFor='Item Name'>Item Name</label>
+                        <label htmlFor='Item Name'>Item Name</label> <span className={classes.required}>*</span>
                         <input type='text' id='itemname' ref={itemNameInputRef} />
                     </div>
                     <div className={classes.control}>
-                        <label htmlFor='Charge Rate'>Charge Rate</label>
+                        <label htmlFor='Charge Rate'>Charge Rate</label> <span className={classes.required}>*</span>
                         <input type='text' id='chargerate' ref={chargeRateInputRef} />
                     </div>
                     <div className={classes.control}>
-                        <label htmlFor='Quantity'>Quantity</label>
+                        <label htmlFor='Quantity'>Quantity</label> <span className={classes.required}>*</span>
                         <input type='number' id='quantity' ref={quantityInputRef} />
                     </div>
                     <div className={classes.actions}>

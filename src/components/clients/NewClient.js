@@ -44,15 +44,15 @@ function NewClient(props) {
             <Card>
                 <form className={classes.form}>
                     <div className={classes.control}>
-                        <label htmlFor='First Name'>First Name</label>
+                        <label htmlFor='First Name'>First Name</label> <span className={classes.required}>*</span>
                         <input type='text' id='firstname' ref={firstNameInputRef} />
                     </div>
                     <div className={classes.control}>
-                        <label htmlFor='Last Name'>Last Name</label>
+                        <label htmlFor='Last Name'>Last Name</label> <span className={classes.required}>*</span>
                         <input type='text' id='lastname' ref={lastNameInputRef} />
                     </div>
                     <div className={classes.control}>
-                        <label htmlFor='Email'>Email</label>
+                        <label htmlFor='Email'>Email</label> <span className={classes.required}>*</span>
                         <input type='text' id='email' ref={emailInputRef} />
                     </div>
                     <div className={classes.control}>
@@ -60,7 +60,7 @@ function NewClient(props) {
                         <input type='text' id='companyname' ref={companyNameInputRef} />
                     </div>
                     <div className={classes.control}>
-                        <label htmlFor='Phone Number'>Phone Number</label>
+                        <label htmlFor='Phone Number'>Phone Number</label> <span className={classes.required}>*</span>
                         <input type='text' id='phonenumber' ref={phoneNumberInputRef} />
                     </div>
                     <div className={classes.actions}>
