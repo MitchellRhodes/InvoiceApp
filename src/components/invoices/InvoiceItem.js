@@ -6,9 +6,8 @@ import DeleteModal from "../UI/DeleteModal";
 import LoadedInvoicesContext from "../../contexts/loadedInvoicesContext";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck } from "@fortawesome/free-solid-svg-icons";
-import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faTrashAlt, faTimes, faChevronCircleDown, faChevronCircleUp } from "@fortawesome/free-solid-svg-icons";
+
 
 
 
@@ -27,6 +26,8 @@ function InvoiceItem(props) {
     const [error, setError] = useState(null);
     const [loadedItems, setLoadedItems] = useState([]);
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [unpaidIsCollapsed, setUnpaidIsCollapsed] = useState(true);
+    const [paidIsCollapsed, setPaidIsCollapsed] = useState(true);
 
 
     useEffect(() => {
@@ -69,6 +70,24 @@ function InvoiceItem(props) {
     function closeDeleteCard() {
         setModalIsOpen(false);
     }
+
+    function openUnpaid() {
+        return setUnpaidIsCollapsed(false);
+    }
+
+    function closeUnpaid() {
+        return setUnpaidIsCollapsed(true);
+    }
+
+    function openPaid() {
+        return setPaidIsCollapsed(false);
+    }
+
+    function closePaid() {
+        return setPaidIsCollapsed(true);
+    }
+
+
 
     async function completeInvoice(invoiceId) {
 
@@ -122,7 +141,18 @@ function InvoiceItem(props) {
 
     return (
         <ul>
-            {props.showCompleted === false && props.completed === false &&
+
+            {props.showCompleted === false && props.completed === false && unpaidIsCollapsed === true &&
+                <Card>
+                    {error && <div>{error}</div>}
+                    {isLoading && <div>Loading...</div>}
+                    <h3>Date Posted: {props.date_created}</h3>
+                    <h4>Amount Due: ${props.total}</h4>
+                    <FontAwesomeIcon icon={faChevronCircleDown} onClick={openUnpaid} className={classes.icon}></FontAwesomeIcon>
+                </Card>
+            }
+
+            {props.showCompleted === false && props.completed === false && unpaidIsCollapsed === false &&
                 <Card>
                     {error && <div>{error}</div>}
                     {isLoading && <div>Loading...</div>}
@@ -147,7 +177,7 @@ function InvoiceItem(props) {
                     </table>
 
                     <div>
-                        <h4>Amount Due: {props.total}</h4>
+                        <h4>Amount Due: ${props.total}</h4>
                     </div>
 
                     <FontAwesomeIcon icon={faCheck} onClick={() => completeInvoice(props.id)} className={`${classes.icon} ${classes.greenIcon}`}></FontAwesomeIcon>
@@ -156,10 +186,22 @@ function InvoiceItem(props) {
                     {modalIsOpen ? <DeleteModal onCancel={closeDeleteCard} onRemove={() => removeInvoice(props.id)} /> : null}
                     {modalIsOpen ? <Backdrop onClick={closeDeleteCard} /> : null}
 
+                    <FontAwesomeIcon icon={faChevronCircleUp} onClick={closeUnpaid} className={classes.icon}></FontAwesomeIcon>
+
                 </Card>
             }
 
-            {props.showCompleted === true && props.completed === true &&
+            {props.showCompleted === true && props.completed === true && paidIsCollapsed === true &&
+                <Card>
+                    {error && <div>{error}</div>}
+                    {isLoading && <div>Loading...</div>}
+                    <h3>Date Posted: {props.date_created}</h3>
+                    <h4>PAID IN FULL: ${props.total}</h4>
+                    <FontAwesomeIcon icon={faChevronCircleDown} onClick={openPaid} className={classes.icon}></FontAwesomeIcon>
+                </Card>
+            }
+
+            {props.showCompleted === true && props.completed === true && paidIsCollapsed === false &&
                 <Card>
                     {error && <div>{error}</div>}
                     {isLoading && <div>Loading...</div>}
@@ -185,7 +227,7 @@ function InvoiceItem(props) {
                     </table>
 
                     <div>
-                        <h4>Total: {props.total}</h4>
+                        <h4>Total: ${props.total}</h4>
                     </div>
 
                     <FontAwesomeIcon icon={faTimes} onClick={() => undoCompleteInvoice(props.id)} className={`${classes.icon} ${classes.redIcon}`}></FontAwesomeIcon>
@@ -193,6 +235,8 @@ function InvoiceItem(props) {
                     <FontAwesomeIcon icon={faTrashAlt} onClick={openDeleteCard} className={classes.icon}></FontAwesomeIcon>
                     {modalIsOpen ? <DeleteModal onCancel={closeDeleteCard} onRemove={() => removeInvoice(props.id)} /> : null}
                     {modalIsOpen ? <Backdrop onClick={closeDeleteCard} /> : null}
+
+                    <FontAwesomeIcon icon={faChevronCircleUp} onClick={closePaid} className={classes.icon}></FontAwesomeIcon>
 
                 </Card>
             }
