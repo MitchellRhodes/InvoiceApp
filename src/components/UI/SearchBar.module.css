@@ -1,0 +1,21 @@
+.position{
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
+
+.hide {
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+}
+
+.searchBar {
+    margin-top: 1rem;
+    width: 80%;
+    align-content: center;
+}

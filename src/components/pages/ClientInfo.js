@@ -7,6 +7,7 @@ import Backdrop from '../UI/Backdrop';
 import NewClient from "../clients/NewClient";
 import ClientList from "../clients/ClientList";
 import LoadedClientsContext from "../../contexts/LoadedClientContext";
+import classes from "../UI/SearchBar.module.css";
 
 
 
@@ -22,6 +23,7 @@ function ClientInfoPage() {
     const [clientPostIsOpen, setClientPostIsOpen] = useState(false);
     const [error, setError] = useState(null);
     const [loadedClients, setLoadedClients] = useState([])
+    const [searchTerm, setSearchTerm] = useState("")
 
 
 
@@ -94,6 +96,14 @@ function ClientInfoPage() {
         return setClientPostIsOpen(false);
     }
 
+    function search(clients) {
+        return clients.filter(client =>
+            client.first_name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1 ||
+            client.last_name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1 ||
+            client.company_name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
+    }
+
+
     return (
         <section>
             {!isAuthenticated && <Navigate to='/' />}
@@ -107,7 +117,22 @@ function ClientInfoPage() {
                 {clientPostIsOpen ? <NewClient onConfirm={closeClientPost} onCancel={closeClientPost} updateClients={updateClientList} /> : null}
                 {clientPostIsOpen ? <Backdrop onClick={closeClientPost} /> : null}
             </div>
-            <ClientList clientInfo={loadedClients} />
+
+            <form className={classes.position}>
+                <label htmlFor="filter-clients">
+                    <span className={classes.hide}>Find Client</span>
+                </label>
+                <input
+                    type="text"
+                    id="filter-clients"
+                    placeholder="Find Client by Name or Company"
+                    className={classes.searchBar}
+                    value={searchTerm}
+                    onChange={(event) => setSearchTerm(event.target.value)}
+                />
+            </form>
+
+            <ClientList clientInfo={search(loadedClients)} />
 
         </section>
 
