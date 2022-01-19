@@ -1,0 +1,46 @@
+-- --phone number is temporary. change it later for verification
+-- --add profile pic(FUTURE)
+
+-- create table users(
+-- 	id SERIAL PRIMARY KEY,
+-- 	first_name text NULL,
+-- 	last_name text NULL,
+-- 	email varchar NOT NULL UNIQUE,
+-- 	phone_number text NULL UNIQUE,
+-- 	company_name varchar(150) NULL
+-- );
+
+
+-- create table clients(
+-- 	id SERIAL PRIMARY KEY,
+-- 	user_id integer NOT NULL REFERENCES users ON DELETE CASCADE,
+-- 	first_name text NOT NULL,
+-- 	last_name text NOT NULL,
+-- 	company_name varchar(150) NULL,
+-- 	email varchar NOT NULL,
+-- 	phone_number text NOT NULL
+-- );
+
+-- --look into storing alpha currency code for helping with exchange rate(FUTURE)
+-- create table invoices(
+-- 	id SERIAL PRIMARY KEY,
+-- 	client_id integer NOT NULL REFERENCES clients ON DELETE CASCADE,
+-- 	date_created timestamp NOT NULL, 
+-- 	total numeric(27,2) NOT NULL,
+--  completed boolean NOT NULL
+-- );
+
+-- create table items(
+-- 	id SERIAL PRIMARY KEY,
+-- 	item varchar NOT NULL,
+-- 	rate numeric(27,2) NOT NULL
+-- );
+
+
+-- create table invoice_items(
+-- 	id SERIAL PRIMARY KEY,
+-- 	invoice_id integer NOT NULL REFERENCES invoices ON DELETE CASCADE,
+-- 	item_id integer NOT NULL REFERENCES items ON DELETE CASCADE,
+-- 	quantity integer NOT NULL
+-- );
+
