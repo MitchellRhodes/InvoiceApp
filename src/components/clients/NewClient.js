@@ -67,6 +67,7 @@ function NewClient(props) {
         }
 
         validate(clientInfo);
+        console.log(isValid, "isValid")
 
         if (isValid) {
             props.updateClients(clientInfo)
