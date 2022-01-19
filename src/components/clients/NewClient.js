@@ -1,9 +1,15 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import Card from '../UI/Card';
 import classes from "../UI/forms.module.css";
 
 
 function NewClient(props) {
+
+    const [firstNameError, setFirstNameError] = useState()
+    const [lastNameError, setLastNameError] = useState()
+    const [emailError, setEmailError] = useState()
+    const [phoneError, setPhoneError] = useState()
+    const [isValid, setIsValid] = useState(false);
 
 
     const firstNameInputRef = useRef();
@@ -12,9 +18,39 @@ function NewClient(props) {
     const companyNameInputRef = useRef();
     const phoneNumberInputRef = useRef();
 
+    function validate(clientInfo) {
+
+
+        if (!clientInfo.email) {
+
+            setEmailError("Email is required and must have an @")
+            setIsValid(false);
+        }
+        if (!clientInfo.first_name) {
+
+            setFirstNameError("First name is required")
+            setIsValid(false);
+        }
+        if (!clientInfo.last_name) {
+
+            setLastNameError("Last name is required")
+            setIsValid(false);
+        }
+        if (!clientInfo.phone_number) {
+
+            setPhoneError("Phone number is required")
+            setIsValid(false);
+        }
+
+        if (!emailError && !firstNameError && !lastNameError && !phoneError) {
+
+            return setIsValid(true);
+        }
+
+    }
+
     function submitHandler(event) {
         event.preventDefault();
-        props.onConfirm();
 
         const enteredFirstName = firstNameInputRef.current.value
         const enteredLastName = lastNameInputRef.current.value;
@@ -30,7 +66,12 @@ function NewClient(props) {
             phone_number: enteredPhone
         }
 
-        props.updateClients(clientInfo)
+        validate(clientInfo);
+
+        if (isValid) {
+            props.updateClients(clientInfo)
+            props.onConfirm();
+        }
 
     }
 
@@ -43,22 +84,31 @@ function NewClient(props) {
         <ul>
             <Card>
                 <form className={classes.form}>
+
+                    <div className={classes.required}>{firstNameError}</div>
                     <div className={classes.control}>
                         <label htmlFor='First Name'>First Name</label> <span className={classes.required}>*</span>
                         <input type='text' id='firstname' ref={firstNameInputRef} />
                     </div>
+
+                    <div className={classes.required}>{lastNameError}</div>
                     <div className={classes.control}>
                         <label htmlFor='Last Name'>Last Name</label> <span className={classes.required}>*</span>
                         <input type='text' id='lastname' ref={lastNameInputRef} />
                     </div>
+
+                    <div className={classes.required}>{emailError}</div>
                     <div className={classes.control}>
                         <label htmlFor='Email'>Email</label> <span className={classes.required}>*</span>
                         <input type='text' id='email' ref={emailInputRef} />
                     </div>
+
                     <div className={classes.control}>
                         <label htmlFor='Company Name'>Company Name</label>
                         <input type='text' id='companyname' ref={companyNameInputRef} />
                     </div>
+
+                    <div className={classes.required}>{phoneError}</div>
                     <div className={classes.control}>
                         <label htmlFor='Phone Number'>Phone Number</label> <span className={classes.required}>*</span>
                         <input type='text' id='phonenumber' ref={phoneNumberInputRef} />
