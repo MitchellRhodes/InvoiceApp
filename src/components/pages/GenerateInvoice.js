@@ -140,19 +140,22 @@ function GenerateInvoicePage() {
     async function postInvoice() {
 
         const newInvoice = {
-            date_created: moment().format("DD-MM-YYYY hh:mm:ss"),
+            date_created: moment().format("YYYY-MM-DD hh:mm:ss"),
             total: cost
         }
+        console.log(newInvoice)
+        debugger;
 
         await axios.post(`http://localhost:8080/invoices/${chosenClient.id}`, newInvoice)
 
             .then(response => {
-
+                console.log(response)
+                debugger;
                 if (response.statusText !== 'Created') {
 
                     throw Error(response.statusText)
                 }
-
+                debugger;
                 postInvoiceItems(response.data);
 
             }).catch(err => {
@@ -166,9 +169,10 @@ function GenerateInvoicePage() {
     }
 
     async function postInvoiceItems(invoice) {
-
+        debugger;
         let postArray = []
-
+        console.log(invoiceItems)
+        console.log(invoice.id)
         invoiceItems.forEach(item => {
             let postData = {
                 item_id: item.id,
@@ -180,7 +184,7 @@ function GenerateInvoicePage() {
                 url: `http://localhost:8080/invoice-items/${invoice.id}`,
                 data: postData
             })
-
+            debugger;
             postArray.push(newPromise);
         })
 
