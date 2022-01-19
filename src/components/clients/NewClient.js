@@ -49,6 +49,9 @@ function NewClient(props) {
             setLastNameError("")
             setPhoneError("")
 
+            props.updateClients(clientInfo)
+            props.onConfirm();
+
             return setIsValid(true)
         }
 
@@ -72,12 +75,9 @@ function NewClient(props) {
             phone_number: enteredPhone
         }
 
-        validate(clientInfo);
+        if (!isValid) {
 
-
-        if (isValid) {
-            props.updateClients(clientInfo)
-            props.onConfirm();
+            validate(clientInfo);
         }
 
     }
