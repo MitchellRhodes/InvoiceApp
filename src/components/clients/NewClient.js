@@ -24,28 +24,34 @@ function NewClient(props) {
         if (!clientInfo.email) {
 
             setEmailError("Email is required and must have an @")
-            setIsValid(false);
+            return setIsValid(false)
         }
         if (!clientInfo.first_name) {
 
             setFirstNameError("First name is required")
-            setIsValid(false);
+            return setIsValid(false)
         }
         if (!clientInfo.last_name) {
 
             setLastNameError("Last name is required")
-            setIsValid(false);
+            return setIsValid(false)
         }
         if (!clientInfo.phone_number) {
 
             setPhoneError("Phone number is required")
-            setIsValid(false);
+            return setIsValid(false)
         }
 
-        if (!emailError && !firstNameError && !lastNameError && !phoneError) {
+        if (clientInfo.email && clientInfo.first_name && clientInfo.last_name && clientInfo.phone_number) {
 
-            return setIsValid(true);
+            setEmailError("")
+            setFirstNameError("")
+            setLastNameError("")
+            setPhoneError("")
+
+            return setIsValid(true)
         }
+
 
     }
 
@@ -67,7 +73,7 @@ function NewClient(props) {
         }
 
         validate(clientInfo);
-        console.log(isValid, "isValid")
+
 
         if (isValid) {
             props.updateClients(clientInfo)
