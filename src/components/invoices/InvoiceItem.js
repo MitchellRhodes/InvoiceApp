@@ -13,6 +13,7 @@ import { faCheck, faTrashAlt, faTimes, faChevronCircleDown, faChevronCircleUp } 
 
 //placeholder, will probably need a more specific one for this component
 import classes from "../clients/ClientItem.module.css";
+import SavePDFModal from "../UI/SavePDFModal";
 
 
 function InvoiceItem(props) {
@@ -28,6 +29,7 @@ function InvoiceItem(props) {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [unpaidIsCollapsed, setUnpaidIsCollapsed] = useState(true);
     const [paidIsCollapsed, setPaidIsCollapsed] = useState(true);
+    const [saveModal, setSaveModal] = useState(false);
 
 
     useEffect(() => {
@@ -138,6 +140,13 @@ function InvoiceItem(props) {
         return closeDeleteCard();
     }
 
+    function openSaveModal() {
+        return setSaveModal(true);
+    }
+
+    function closeSaveModal() {
+        return setSaveModal(false);
+    }
 
     return (
         <ul>
@@ -187,6 +196,10 @@ function InvoiceItem(props) {
                     {modalIsOpen ? <Backdrop onClick={closeDeleteCard} /> : null}
 
                     <FontAwesomeIcon icon={faChevronCircleUp} onClick={closeUnpaid} className={classes.icon}></FontAwesomeIcon>
+
+                    <button onClick={openSaveModal}>Save PDF</button>
+                    {saveModal ? <SavePDFModal onCancel={closeSaveModal} /> : null}
+                    {saveModal ? <Backdrop onClick={closeSaveModal} /> : null}
 
                 </Card>
             }

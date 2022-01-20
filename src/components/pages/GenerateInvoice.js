@@ -151,6 +151,7 @@ function GenerateInvoicePage() {
 
                     throw Error(response.statusText)
                 }
+
                 postInvoiceItems(response.data);
 
             }).catch(err => {
@@ -159,8 +160,8 @@ function GenerateInvoicePage() {
                 console.log(error)
             })
 
-
         closeFinalizeInvoice();
+
     }
 
     async function postInvoiceItems(invoice) {
@@ -185,6 +186,7 @@ function GenerateInvoicePage() {
             .then(axios.spread((...responses) => {
 
                 responses.forEach(res => console.log('Success'))
+
             }))
             .catch(err => {
 
@@ -192,9 +194,11 @@ function GenerateInvoicePage() {
                 console.log(error)
             })
 
+
         return navigate(`/client`)
 
     }
+
 
     return (
         <section>
@@ -230,7 +234,6 @@ function GenerateInvoicePage() {
             <button onClick={openFinalizeInvoice}>Finalize</button>
             {finalizeInvoice ? <FinalInvoicePage onSend={postInvoice} onCancel={closeFinalizeInvoice} chosenClient={chosenClient} /> : null}
             {finalizeInvoice ? <Backdrop onClick={closeFinalizeInvoice} /> : null}
-
 
         </section >
     )

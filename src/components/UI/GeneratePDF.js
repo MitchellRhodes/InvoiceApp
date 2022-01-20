@@ -13,6 +13,7 @@ function GeneratePDF() {
 
     return (
 
+
         <button onClick={generateJsPDF}>GeneratePDF</button>
     )
 }
