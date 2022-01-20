@@ -147,7 +147,6 @@ function GenerateInvoicePage() {
         await axios.post(`http://localhost:8080/invoices/${chosenClient.id}`, newInvoice)
 
             .then(response => {
-                console.log(response)
                 if (response.statusText !== 'Created') {
 
                     throw Error(response.statusText)
@@ -166,8 +165,7 @@ function GenerateInvoicePage() {
 
     async function postInvoiceItems(invoice) {
         let postArray = []
-        console.log(invoiceItems)
-        console.log(invoice.id)
+
         invoiceItems.forEach(item => {
             let postData = {
                 item_id: item.id,
