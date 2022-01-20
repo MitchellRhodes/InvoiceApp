@@ -4,6 +4,7 @@ import classes from './Modal.module.css';
 
 function SavePDFModal(props) {
 
+
     function cancelHandler() {
         props.onCancel();
     }
@@ -13,7 +14,7 @@ function SavePDFModal(props) {
     return (
         <div className={classes.modal}>
             <p>Would you like to save a PDF of your invoice?</p>
-            <GeneratePDF />
+            <GeneratePDF invoice={props.invoice} />
             <button onClick={cancelHandler}>Cancel</button>
         </div>
     )

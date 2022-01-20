@@ -198,7 +198,7 @@ function InvoiceItem(props) {
                     <FontAwesomeIcon icon={faChevronCircleUp} onClick={closeUnpaid} className={classes.icon}></FontAwesomeIcon>
 
                     <button onClick={openSaveModal}>Save PDF</button>
-                    {saveModal ? <SavePDFModal onCancel={closeSaveModal} /> : null}
+                    {saveModal ? <SavePDFModal onCancel={closeSaveModal} invoice={props} /> : null}
                     {saveModal ? <Backdrop onClick={closeSaveModal} /> : null}
 
                 </Card>
