@@ -21,12 +21,34 @@ function GeneratePDF(props) {
     function generateJsPDF() {
 
         const doc = new jsPDF();
-        doc.text(`Client: ${chosenClient.first_name} ${chosenClient.last_name}`, 10, 10); //set text with the info from invoice and client
+        const pageHeight = doc.internal.pageSize.height;
+
+        let text = `Client: ${chosenClient.first_name} ${chosenClient.last_name}`
+        let textX = (doc.internal.pageSize.getWidth() - doc.getTextWidth(text)) / 2
+        doc.text(text, textX, 10);
+
+        //date
+        let date = `Date Posted: ${invoice.date_created}`
+        let dateX = (doc.internal.pageSize.getWidth() - doc.getTextWidth(date)) / 2
+        doc.text(date, dateX, 20);
+
+        //items
+
+
+        // if (y >= pageHeight) {
+        //     doc.addPage();
+        // }
+
+        //total
+        let total = `Total: ${invoice.total}`
+        doc.text(total, 20, pageHeight - 20);
+
         doc.save(`${chosenClient.first_name}_${chosenClient.last_name}_${invoice.id}.pdf`);
+
+        //handle closing the modal emit it up
     }
 
     return (
-
 
         <button onClick={generateJsPDF}>GeneratePDF</button>
     )
