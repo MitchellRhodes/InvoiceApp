@@ -3,6 +3,7 @@ import { createContext, useState } from "react";
 
 const LoadedInvoicesContext = createContext({
     loadedInvoices: [],
+    invoiceItems: [],
     removeInvoice: (invoiceId) => { },
     invoiceIsComplete: (completedInvoice) => { }
 })
@@ -10,6 +11,8 @@ const LoadedInvoicesContext = createContext({
 export function LoadedInvoicesContextProvider(props) {
 
     const [invoices, setInvoices] = useState([]);
+    const loadedItems = useState([]);
+
 
     function removeInvoiceHandler(invoiceId) {
 
@@ -28,6 +31,7 @@ export function LoadedInvoicesContextProvider(props) {
 
     const context = {
         loadedInvoices: invoices,
+        invoiceItems: loadedItems,
         removeInvoice: removeInvoiceHandler,
         invoiceIsComplete: invoiceIsCompleteHandler
     }

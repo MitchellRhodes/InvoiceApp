@@ -49,6 +49,7 @@ function InvoiceItem(props) {
 
                 setIsLoading(false);
                 setError(null);
+                invoiceContext.invoiceItems = response.data;
                 setLoadedItems(response.data)
 
             }).catch(err => {
@@ -62,7 +63,7 @@ function InvoiceItem(props) {
         }
         getInvoiceItems();
 
-    }, [props.id])
+    }, [props.id, invoiceContext])
 
 
     function openDeleteCard() {
