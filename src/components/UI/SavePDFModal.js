@@ -14,7 +14,7 @@ function SavePDFModal(props) {
     return (
         <div className={classes.modal}>
             <p>Would you like to save a PDF of your invoice?</p>
-            <GeneratePDF invoice={props.invoice} />
+            <GeneratePDF invoice={props.invoice} onCancel={cancelHandler} />
             <button onClick={cancelHandler}>Cancel</button>
         </div>
     )

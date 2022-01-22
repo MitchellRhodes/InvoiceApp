@@ -58,7 +58,7 @@ function GeneratePDF(props) {
 
         doc.save(`${chosenClient.first_name}_${chosenClient.last_name}_${invoice.id}.pdf`);
 
-        //handle closing the modal emit it up
+        props.onCancel();
     }
 
     return (
