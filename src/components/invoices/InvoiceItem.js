@@ -31,6 +31,7 @@ function InvoiceItem(props) {
     const [paidIsCollapsed, setPaidIsCollapsed] = useState(true);
     const [saveModal, setSaveModal] = useState(false);
 
+    invoiceContext.invoiceItems = loadedItems;
 
     useEffect(() => {
 
@@ -49,7 +50,6 @@ function InvoiceItem(props) {
 
                 setIsLoading(false);
                 setError(null);
-                invoiceContext.invoiceItems = response.data;
                 setLoadedItems(response.data)
 
             }).catch(err => {
