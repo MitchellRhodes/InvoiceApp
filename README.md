@@ -3,7 +3,7 @@
 The InvoiceApp is meant to help companies create and store clients and the invoices of said clients. Check which invoices are outstanding, and keep a record of those that have been paid. 
 
 # What was used in the making of this project
-I used React as the framework with Javascript as the main language. Express, Node.js, and PostgreSQL were used for the back-end. I also used some libraries/packages such as JsPDF to generate PDFs, Moment.js for timestamps, and Joi for back-end validation.
+I used React as the framework with Javascript as the main language, and Auth0 for log in and user validation. Express, Node.js, and PostgreSQL were used for the back-end. I also used some libraries/packages such as JsPDF to generate PDFs, Moment.js for timestamps, and Joi for back-end validation.
 
 # Personal point of project
 
