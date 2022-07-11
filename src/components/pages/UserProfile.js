@@ -123,6 +123,7 @@ function UserProfilePage() {
         const updatedUser = {
             first_name: enteredFirstName,
             last_name: enteredLastName,
+            email: user.email,
             company_name: enteredCompany,
             phone_number: enteredPhone
         }

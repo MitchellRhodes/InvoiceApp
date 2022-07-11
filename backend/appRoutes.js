@@ -1,7 +1,7 @@
-const { response } = require('express');
+// const { response } = require('express');
 const express = require('express');
 const pgp = require('pg-promise')();
-const Joi = require('joi');
+// const Joi = require('joi');
 
 const routes = express.Router();
 
@@ -105,11 +105,11 @@ routes.get('/invoice-items/:id', async (req, res) => {
 //New User
 routes.post('/users', async (req, res) => {
 
-    const validation = validateUser(req.body);
+    // const validation = validateUser(req.body);
 
-    if (validation.error) {
-        return res.status(400).send(validation.error.details[0].message)
-    }
+    // if (validation.error) {
+    //     return res.status(400).send(validation.error.details[0].message)
+    // }
 
     await db.none(`INSERT INTO users(email) VALUES($(email))`, {
         email: req.body.email
@@ -125,11 +125,11 @@ routes.post('/users', async (req, res) => {
 //New Client
 routes.post('/clients/:id', async (req, res) => {
 
-    const validation = validateClient(req.body);
+    // const validation = validateClient(req.body);
 
-    if (validation.error) {
-        return res.status(400).send(validation.error.details[0].message)
-    }
+    // if (validation.error) {
+    //     return res.status(400).send(validation.error.details[0].message)
+    // }
 
     await db.none(`INSERT INTO clients(
         user_id,first_name,last_name,company_name,email,phone_number)
@@ -154,11 +154,11 @@ routes.post('/clients/:id', async (req, res) => {
 //post new item
 routes.post('/items', async (req, res) => {
 
-    const validation = validateItem(req.body);
+    // const validation = validateItem(req.body);
 
-    if (validation.error) {
-        return res.status(400).send(validation.error.details[0].message)
-    }
+    // if (validation.error) {
+    //     return res.status(400).send(validation.error.details[0].message)
+    // }
 
     await db.none(`INSERT INTO items(item,rate)
         VALUES($(item),$(rate))`, {
@@ -178,11 +178,11 @@ routes.post('/items', async (req, res) => {
 //New Invoice for specific client and a specific date
 routes.post('/invoices/:id', async (req, res) => {
 
-    const validation = validateInvoice(req.body);
+    // const validation = validateInvoice(req.body);
 
-    if (validation.error) {
-        return res.status(400).send(validation.error.details[0].message)
-    }
+    // if (validation.error) {
+    //     return res.status(400).send(validation.error.details[0].message)
+    // }
 
     await db.none(`INSERT INTO invoices(
         client_id,date_created,total,completed)
@@ -207,11 +207,11 @@ routes.post('/invoices/:id', async (req, res) => {
 //POST INVOICE ITEMS
 routes.post('/invoice-items/:id', async (req, res) => {
 
-    const validation = validateInvoiceItems(req.body);
+    // const validation = validateInvoiceItems(req.body);
 
-    if (validation.error) {
-        return res.status(400).send(validation.error.details[0].message)
-    }
+    // if (validation.error) {
+    //     return res.status(400).send(validation.error.details[0].message)
+    // }
 
     await db.none(`INSERT INTO invoice_items(
         invoice_id,item_id,quantity)
@@ -244,11 +244,11 @@ routes.put('/users/:id', async (req, res) => {
         return res.status(404).send('User ID was not found.')
     }
 
-    const validation = validateUserUpdate(req.body);
+    // const validation = validateUserUpdate(req.body);
 
-    if (validation.error) {
-        return res.status(400).send(validation.error.details[0].message);
-    }
+    // if (validation.error) {
+    //     return res.status(400).send(validation.error.details[0].message);
+    // }
 
     await db.oneOrNone(`UPDATE users
     SET
@@ -285,11 +285,11 @@ routes.put('/clients/:id', async (req, res) => {
         res.status(404).send('Client was not found')
     }
 
-    const validation = validateUserUpdate(req.body);
+    // const validation = validateUserUpdate(req.body);
 
-    if (validation.error) {
-        return res.status(400).send(validation.error.details[0].message);
-    }
+    // if (validation.error) {
+    //     return res.status(400).send(validation.error.details[0].message);
+    // }
 
     await db.oneOrNone(`UPDATE clients
     SET
@@ -443,76 +443,76 @@ routes.delete('/items/:id', async (req, res) => {
 
 //VALIDATIONS========================================================
 
-function validateUser(user) {
-    const schema = Joi.object({
+// function validateUser(user) {
+//     const schema = Joi.object({
 
-        //fix phone number later
-        first_name: Joi.string().min(1),
-        last_name: Joi.string().min(1),
-        email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
-        phone_number: Joi.string().min(1),
-        company_name: Joi.string().min(1)
-    });
+//         //fix phone number later
+//         first_name: Joi.string().min(1),
+//         last_name: Joi.string().min(1),
+//         email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+//         phone_number: Joi.string().min(1),
+//         company_name: Joi.string().min(1)
+//     });
 
-    return schema.validate(user);
-};
+//     return schema.validate(user);
+// };
 
 //Also for client updates
-function validateUserUpdate(user) {
-    const schema = Joi.object({
-        first_name: Joi.string().allow('', null),
-        last_name: Joi.string().allow('', null),
-        email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-        phone_number: Joi.string().allow('', null),
-        company_name: Joi.string().allow('', null)
-    });
+// function validateUserUpdate(user) {
+//     const schema = Joi.object({
+//         first_name: Joi.string().allow('', null),
+//         last_name: Joi.string().allow('', null),
+//         email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+//         phone_number: Joi.string().allow('', null),
+//         company_name: Joi.string().allow('', null)
+//     });
 
-    return schema.validate(user);
-};
-
-
-function validateClient(client) {
-    const schema = Joi.object({
-        first_name: Joi.string().min(1).required(),
-        last_name: Joi.string().min(1).required(),
-        email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
-        phone_number: Joi.string().min(1).required(),
-        company_name: Joi.string().allow('', null)
-    });
-
-    return schema.validate(client);
-};
-
-function validateItem(item) {
-
-    const schema = Joi.object({
-        item: Joi.string().min(1).required(),
-        rate: Joi.number().precision(2).required()
-    });
-
-    return schema.validate(item);
-}
+//     return schema.validate(user);
+// };
 
 
-function validateInvoice(invoice) {
+// function validateClient(client) {
+//     const schema = Joi.object({
+//         first_name: Joi.string().min(1).required(),
+//         last_name: Joi.string().min(1).required(),
+//         email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).required(),
+//         phone_number: Joi.string().min(1).required(),
+//         company_name: Joi.string().allow('', null)
+//     });
 
-    const schema = Joi.object({
-        date_created: Joi.date().required(),
-        total: Joi.number().precision(2).required()
-    });
+//     return schema.validate(client);
+// };
 
-    return schema.validate(invoice);
-}
+// function validateItem(item) {
 
-function validateInvoiceItems(invoiceItems) {
+//     const schema = Joi.object({
+//         item: Joi.string().min(1).required(),
+//         rate: Joi.number().precision(2).required()
+//     });
 
-    const schema = Joi.object({
-        item_id: Joi.number().integer().required(),
-        quantity: Joi.number().integer().required()
-    });
+//     return schema.validate(item);
+// }
 
-    return schema.validate(invoiceItems);
-}
+
+// function validateInvoice(invoice) {
+
+//     const schema = Joi.object({
+//         date_created: Joi.date().required(),
+//         total: Joi.number().precision(2).required()
+//     });
+
+//     return schema.validate(invoice);
+// }
+
+// function validateInvoiceItems(invoiceItems) {
+
+//     const schema = Joi.object({
+//         item_id: Joi.number().integer().required(),
+//         quantity: Joi.number().integer().required()
+//     });
+
+//     return schema.validate(invoiceItems);
+// }
 
 
 module.exports = routes;
